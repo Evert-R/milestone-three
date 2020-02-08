@@ -20,12 +20,12 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def get_tracks():
-    return render_template("tracks.html")
+    return render_template('tracks.html',
+                           tracks=mongo.db.tracks.find(),
+                           users=mongo.db.users.find())
 
 
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
             debug=True)
-
-mongo.db.tracks.insert_one({'name': 'Evert'})

@@ -1,5 +1,64 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
+{% for track in tracks %}
+<div class="row">
 
-<h1>hello</h1>
+    <div class="col s3">
+        <div class="er-user-info">
+            <!-- Lookup user details and push to screen -->
+            {% for user in users %}
+            {% if track.user|int() == user._id|int() %}
+            <div class="er-profile-pic">
+                <img src="{{user.profile_pic}}" alt="User profile picture">
+            </div>
+            <div>
+                <h2>{{user.user_name}}</h2>
+                <p>{{user.user_city}}, {{user.user_country}}</p>
+                <p><a href="{{user.website}}" target="_blank" title="Artist website"><i
+                            class="material-icons">language</i></a></p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
 
+    <div class="col s9">
+        <ul class="collapsible">
+            <li>
+                <div>
+                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header">
+                    <i class="material-icons">info</i>{{track.artist_name}} - {{track.title}}
+                </div>
+                <div class="collapsible-body">
+                    <div class="row">
+                        <div class="col s12">
+                            <p>
+                                {{track.title}} is a {{track.style}} track made by {{track.artist_name}}.
+                                It was created in {{track.year}} and was made using
+                                {{track.creation_method}}. Credits go to {{track.credits}}. This work is licensed under
+                                {{track.license}}.<br>
+                            </p>
+                            <p>{{track.free_text}}</p>
+                        </div>
+
+                    </div>
+            </li>
+            <li>
+                <div class="collapsible-header">
+                    <i class="material-icons">star</i>Votes
+                </div>
+                <div class="collapsible-body">
+                    <span>Lorem ipsum dolor sit amet.</span>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endfor %}
 {% endblock %}

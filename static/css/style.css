@@ -1,7 +1,42 @@
 html {
-    background-color: black;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 0.9em;
+    background-color: #9e8f6c;
 }
 
-h1 {
-    color: yellow;
+p {
+    font-size: 1rem;
+    text-align: justify;
+}
+
+a, a:visited, a:active {
+    color: inherit;
+    text-decoration: unset;
+}
+
+h2 {
+    font-size: 2em;
+    text-align: center;
+}
+
+.er-main-content {
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.er-user-info {
+    border: 1px solid #ddd;
+    margin: .5rem 0 1rem 0;
+    height: 100%;
+}
+
+.er-profile-pic {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.er-profile-pic img {
+    width: 100%;
 }
