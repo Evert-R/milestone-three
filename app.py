@@ -25,6 +25,26 @@ def get_tracks():
                            users=mongo.db.users.find())
 
 
+@app.route('/add_track')
+def add_track():
+    return render_template('addtrack.html',
+                           users=mongo.db.users.find(),
+                           styles=mongo.db.styles.find(),
+                           methods=mongo.db.methods.find())
+
+
+@app.route('/insert_track', methods=['POST'])
+def insert_track():
+    tracks = mongo.db.tracks
+    # request to get the form, converted to dict
+    track = request.form.to_dict()
+    embed_code = track['soundcloud']
+    track_position = embed_code.find('track')
+    track['soundcloud'] = embed_code[track_position+7:track_position+16]
+    tracks.insert_one(track)
+    return redirect(url_for('get_tracks'))
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),

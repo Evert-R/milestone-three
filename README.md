@@ -35,3 +35,35 @@
     - Image editing 
 - [Steinberg Cubase 10](https://new.steinberg.net/cubase/) 
     - Converting music from Wav to Mp3 and FLAC
+
+## Deployment
+### Github Pages
+This project was deployed via heroku from the ```master branch```
+
+#### This was done following this procedure:
+1. Goto the apps page on Heoku: [Heroku](https://dashboard.heroku.com/apps)
+2. Click ```New```
+3. Select ```Create new app```
+4. Enter a unique ```App name```
+5. Select your ```Region```
+6. Click ```Create App```
+7. Go to ```Settings```
+8. Click ```Reveal Config Vars```
+9. Add the following variables :
+    1. IP           -   ```0.0.0.0```
+    2. PORT         -   ```5000```
+    3. MONGO_URI    -   ```<Your personal MongoDB URI>```
+
+Deploy
+click Connect to GitHub
+click ok to authorize the connection
+use the search button to select the apropiate repository
+
+1. Enter from your local terminal : 
+    1. ```heroku login```
+            Provide your email and password to connect to heroku
+    2. ```heroku git:remote -a <your chosen app name>```
+    3. ```git push heroku master```
+
+
+[Click here to view the deployed website](https://evert-r.github.io/milestone-one)
