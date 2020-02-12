@@ -8,7 +8,7 @@
             <div class="input-field col s12 m6">
                 <i class="material-icons prefix">account_circle</i>
                 <select id="user" name="user">
-                    <option value="" disabled selected>What's your username?</option>
+                    <option value="" disabled selected>What's your username ?</option>
                     {% for user in users %}
                     <option value="{{user._id}}">{{user.user_name}}</option>
                     {% endfor %}
@@ -58,7 +58,7 @@
                 <i class="material-icons prefix">subject</i>
                 <textarea placeholder="Tell us a little about the what, why, when and how" id="free_text"
                     name="free_text" class="materialize-textarea"></textarea>
-                <label for="textarea1">Free text</label>
+                <label for="free_text">Free text</label>
             </div>
             <div class="input-field col s12 m6">
                 <i class="material-icons prefix">palette</i>

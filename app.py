@@ -19,10 +19,10 @@ mongo = PyMongo(app)
 
 
 @app.route('/')
+@app.route('/get_tracks')
 def get_tracks():
     return render_template('tracks.html',
-                           tracks=mongo.db.tracks.find(),
-                           users=mongo.db.users.find())
+                           tracks=mongo.db.tracks.find())
 
 
 @app.route('/add_track')
@@ -31,6 +31,26 @@ def add_track():
                            users=mongo.db.users.find(),
                            styles=mongo.db.styles.find(),
                            methods=mongo.db.methods.find())
+
+
+@app.route('/vote_track/<track_id>')
+def vote_track(track_id):
+    voted_track = mongo.db.tracks.find_one({"_id": ObjectId(track_id)})
+    return render_template('votetrack.html',
+                           track=voted_track,
+                           users=mongo.db.users.find())
+
+
+@app.route('/insert_vote/<track_id>', methods=['POST'])
+def insert_vote(track_id):
+    tracks = mongo.db.tracks
+    tracks.update_one({'_id': ObjectId(track_id)},
+                      {'$push': {'votes': {
+                          'voted_user': request.form.get('user'),
+                          'vote': request.form.get('vote'),
+                          'motivation': request.form.get('motivation')
+                      }}})
+    return redirect(url_for('get_tracks'))
 
 
 @app.route('/insert_track', methods=['POST'])
@@ -48,4 +68,4 @@ def insert_track():
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=False)
+            debug=True)

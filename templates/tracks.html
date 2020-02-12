@@ -3,29 +3,7 @@
 {% for track in tracks %}
 
 <div class="row">
-    <div class="col l3 s12">
-        <div class="er-user-info">
-            <!-- Lookup user details and push to screen -->
-            {% for user in users %}
-            {% if track.user|int() == user._id|int() %}
-            <div class="er-image-outer">
-                <div class="er-profile-pic">
-                    <img src="{{user.profile_pic}}" alt="User profile picture">
-                </div>
-
-            </div>
-            <div>
-                <h2>{{user.user_name}}</h2>
-                <p>{{user.user_city}}, {{user.user_country}}</p>
-                <p><a href="{{user.website}}" target="_blank" title="Artist website"><i
-                            class="material-icons">language</i></a></p>
-            </div>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-
-    <div class="col l9 s12">
+    <div class="col s12">
         <ul class="collapsible">
             <li>
                 <div>
@@ -58,7 +36,8 @@
                     <i class="material-icons">star</i>Votes
                 </div>
                 <div class="collapsible-body">
-                    <span>Lorem ipsum dolor sit amet.</span>
+                    <a href="{{url_for('vote_track', track_id=track._id)}}"
+                        class="waves-effect waves-light btn btn_small blue">Vote for this track</a>
                 </div>
             </li>
         </ul>
