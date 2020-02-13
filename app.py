@@ -22,7 +22,7 @@ mongo = PyMongo(app)
 @app.route('/get_tracks')
 def get_tracks():
     return render_template('tracks.html',
-                           tracks=mongo.db.tracks.find())
+                           tracks=mongo.db.tracks.find().sort("total_votes", -1))
 
 
 @app.route('/add_track')
