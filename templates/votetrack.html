@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Add your track</h1>
+<h1>Vote for this track</h1>
 
 {{track._id}}
+
+<div class="row">
+    <div>
+        <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
+    </div>
+
+</div>
+
 <div class="row">
     <form action="{{ url_for('insert_vote', track_id=track._id) }}" method="POST" class="col s12">
 
@@ -20,7 +29,9 @@
             </div>
         </div>
         <div class="row">
+            <i class="material-icons">star</i>
             <p class="range-field">
+
                 <input type="range" id="vote" name="vote" min="1" max="10" />
             </p>
         </div>

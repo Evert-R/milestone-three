@@ -47,9 +47,13 @@ def insert_vote(track_id):
     tracks.update_one({'_id': ObjectId(track_id)},
                       {'$push': {'votes': {
                           'voted_user': request.form.get('user'),
-                          'vote': request.form.get('vote'),
+                          'vote': int(request.form.get('vote')),
                           'motivation': request.form.get('motivation')
                       }}})
+    # add the vote to the total for this track
+    tracks.update_one({'_id': ObjectId(track_id)},
+                      {'$inc': {'total_votes': int(request.form.get('vote'))}})
+
     return redirect(url_for('get_tracks'))
 
 
@@ -58,7 +62,9 @@ def insert_track():
     tracks = mongo.db.tracks
     # request to get the form, converted to dict
     track = request.form.to_dict()
+    # Get soundcloud embed code
     embed_code = track['soundcloud']
+    # strip the track number from the so we can use our own modified embed code
     track_position = embed_code.find('track')
     track['soundcloud'] = embed_code[track_position+7:track_position+16]
     tracks.insert_one(track)
