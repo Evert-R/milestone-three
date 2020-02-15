@@ -22,7 +22,8 @@ mongo = PyMongo(app)
 @app.route('/get_tracks')
 def get_tracks():
     return render_template('tracks.html',
-                           tracks=mongo.db.tracks.find().sort("total_votes", -1))
+                           tracks=mongo.db.tracks.find().sort("total_votes", -1),
+                           users=mongo.db.users.find())
 
 
 @app.route('/add_track')
@@ -31,6 +32,27 @@ def add_track():
                            users=mongo.db.users.find(),
                            styles=mongo.db.styles.find(),
                            methods=mongo.db.methods.find())
+
+
+@app.route('/insert_track', methods=['POST'])
+def insert_track():
+    tracks = mongo.db.tracks
+    # request to get the form, converted to dict
+    track = request.form.to_dict()
+    # Get soundcloud embed code
+    embed_code = track['soundcloud']
+    # strip the track number so we can use our own modified embed code
+    track_position = embed_code.find('track')
+    track['soundcloud'] = embed_code[track_position+7:track_position+16]
+    tracks.insert_one(track)
+    return redirect(url_for('get_tracks'))
+
+
+@app.route('/view_user/<user_id>')
+def view_user(user_id):
+    return render_template('viewuser.html',
+                           user=mongo.db.users.find_one(
+                               {"_id": ObjectId(user_id)}))
 
 
 @app.route('/vote_track/<track_id>')
@@ -57,21 +79,7 @@ def insert_vote(track_id):
     return redirect(url_for('get_tracks'))
 
 
-@app.route('/insert_track', methods=['POST'])
-def insert_track():
-    tracks = mongo.db.tracks
-    # request to get the form, converted to dict
-    track = request.form.to_dict()
-    # Get soundcloud embed code
-    embed_code = track['soundcloud']
-    # strip the track number from the so we can use our own modified embed code
-    track_position = embed_code.find('track')
-    track['soundcloud'] = embed_code[track_position+7:track_position+16]
-    tracks.insert_one(track)
-    return redirect(url_for('get_tracks'))
-
-
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=True)
+            debug=False)

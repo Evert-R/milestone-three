@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1>Tracks in this contest</h1>
 {% for track in tracks %}
-
+{# Split username in _id and name #}
+{% set current_user = track.user.split(',') %}
 <div class="row">
     <div class="col s12">
         <ul class="collapsible">
@@ -17,27 +19,53 @@
                 </div>
                 <div class="collapsible-body">
                     <div class="row">
-                        <div class="col s12">
+                        <div class="col s12 m6">
                             <p>
-                                {{track.title}} is a {{track.style.lower()}} track made by {{track.artist_name}}.
-                                It was created in {{track.creation_date}} and was made using
-                                {{track.creation_method.lower()}}. Credits go to {{track.credits_who}} for
-                                {{track.credits_what}}. This work is
-                                licensed under
-                                {{track.license}}.<br>
+                                {{ track.artist_name }}: {{track.free_text}}
                             </p>
-                            <p>{{track.free_text}}</p>
                         </div>
-
+                        <div class="col s12 m6">
+                            <p>
+                                {{ track.title }} is a {{ track.style.lower() }} track made by {{ track.artist_name }}.
+                                It was created in {{ track.creation_date }} and was made using
+                                {{ track.creation_method.lower() }}. Credits go to {{ track.credits_who }} for
+                                {{ track.credits_what }}. This work is
+                                licensed under
+                                {{ track.license }}.<br>
+                            </p>
+                        </div>
+                        <p>This track was added by <a href="{{url_for('view_user', user_id=current_user[0])}}"
+                                name="View user details"> {{ current_user[1] }} </a> </p>
                     </div>
             </li>
             <li>
                 <div class="collapsible-header">
-                    <i class="material-icons">star</i>Votes
+                    <i class="material-icons">info</i>Votes
+                    <span class="er-right">Total score: {{track.total_votes}}</span>
                 </div>
                 <div class="collapsible-body">
+                    <div class="row">
+                        {% for vote in track.votes %}
+                        {% if vote.voted_user %}
+                        {# Split voted username in _id and name #}
+                        {% set current_voter = vote.voted_user.split(',') %}
+
+                        <div class="col s2">
+                            <a href="{{url_for('view_user', user_id=current_user[0])}}" name="View user details">
+                                {{ current_voter[1] }} </a>
+                        </div>
+                        <div class="col s2">
+                            {{ vote.vote }}
+                        </div>
+                        <div class="col s8">
+                            {{ vote.motivation }}
+                        </div>
+
+                        {% endif %}
+                        {% endfor %}
+                    </div>
                     <a href="{{url_for('vote_track', track_id=track._id)}}"
-                        class="waves-effect waves-light btn btn_small blue">Vote for this track</a>
+                        class="waves-effect waves-light btn btn_small grey">Vote for this track</a>
                 </div>
             </li>
         </ul>

@@ -10,7 +10,7 @@
                 <select id="user" name="user">
                     <option value="" disabled selected>What's your username ?</option>
                     {% for user in users %}
-                    <option value="{{user._id}}">{{user.user_name}}</option>
+                    <option value="{{user._id}},{{user.user_name}}">{{user.user_name}}</option>
                     {% endfor %}
                 </select>
                 <label>Username</label>
@@ -30,6 +30,10 @@
                 <input placeholder="Paste the soundcloud embed code here" id="soundcloud" name="soundcloud" type="text"
                     class="validate">
                 <label for="artist_name">Soundcloud embed code</label>
+                <a class="tooltipped" data-position="bottom"
+                    data-tooltip="Goto your soundcloud-track and click. Switch to 'Embed'. Click on the embed code once and then right-click again to copy. Then right-click here and paste.">
+                    <i class="material-icons prefix">help_outline</i>
+                </a>
             </div>
         </div>
 
@@ -56,8 +60,8 @@
         <div class="row">
             <div class="input-field col s12 m6">
                 <i class="material-icons prefix">subject</i>
-                <textarea placeholder="Tell us a little about the what, why, when and how" id="free_text"
-                    name="free_text" class="materialize-textarea"></textarea>
+                <textarea placeholder="Tell us a little about this track" id="free_text" name="free_text"
+                    class="materialize-textarea"></textarea>
                 <label for="free_text">Free text</label>
             </div>
             <div class="input-field col s12 m6">
@@ -81,8 +85,9 @@
             </div>
             <div class="input-field col s12 m6">
                 <i class="material-icons prefix">settings</i>
-                <input placeholder="for" id="credits_what" name="credits_what" type="text" class="validate">
-                <label for="credits">for</label>
+                <input placeholder="Credit for what?" id="credits_what" name="credits_what" type="text"
+                    class="validate">
+                <label for="credits">credits for</label>
             </div>
         </div>
 

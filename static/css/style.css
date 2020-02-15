@@ -14,8 +14,18 @@ a, a:visited, a:active {
 }
 
 h1 {
-    font-size: 2em;
+    font-size: 2rem;
+    padding-bottom: 1.5rem;
     text-align: center;
+}
+
+h2 {
+    font-size: 1.2rem;
+}
+
+.er-right {
+    margin-right: 0px;
+    margin-left: auto;
 }
 
 .er-main-content {
