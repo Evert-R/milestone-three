@@ -70,7 +70,7 @@ def insert_user():
     user = request.form.to_dict()
     """ get the current date and time, and add to the user record """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-    user.update({'timestamp': now})
+    user.update({'timestamp': now, 'last_updated': now})
     """ insert user in database and return to the track overview page """
     users.insert_one(user)
     return redirect(url_for('get_tracks'))
@@ -81,6 +81,25 @@ def view_user(user_id):
     return render_template('viewuser.html',
                            user=mongo.db.users.find_one(
                                {"_id": ObjectId(user_id)}))
+
+
+@app.route('/update_user/<user_id>', methods=['POST'])
+def update_user(user_id):
+    users = mongo.db.users
+    """ get the current date and time, and add to the user record """
+    now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+    """ insert user in database and return to the track overview page """
+    users.update({"_id": ObjectId(user_id)},
+                 {'user_name': request.form.get('user_name'),
+                  'user_email': request.form.get('user_email'),
+                  'profile_pic': request.form.get('profile_pic'),
+                  'user_city': request.form.get('user_city'),
+                  'user_country': request.form.get('user_country'),
+                  'user_website': request.form.get('user_website'),
+                  'mailing_list': request.form.get('mailing_list'),
+                  'last_updated': now
+                  })
+    return redirect(url_for('get_tracks'))
 
 
 @app.route('/vote_track/<track_id>')
@@ -107,7 +126,14 @@ def insert_vote(track_id):
     return redirect(url_for('get_tracks'))
 
 
+@app.route('/reset_contest')
+def reset_contest():
+    tracks = mongo.db.tracks
+    tracks.drop()
+    return redirect(url_for('get_tracks'))
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=True)
+            debug=False)
