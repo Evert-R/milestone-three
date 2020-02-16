@@ -23,6 +23,10 @@ h2 {
     font-size: 1.2rem;
 }
 
+.er-center {
+    text-align: center;
+}
+
 .er-right {
     margin-right: 0px;
     margin-left: auto;

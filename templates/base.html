@@ -15,8 +15,9 @@
 <body>
 
     <header>
-        <a href="{{url_for('get_tracks')}}">Home</a><br>
-        <a href="{{url_for('add_track')}}">Add track</a>
+        <a href="{{url_for('get_tracks')}}">View all tracks</a><br>
+        <a href="{{url_for('add_track')}}">Add track</a><br>
+        <a href="{{url_for('add_user')}}">Add user</a><br>
     </header>
 
     <div class="container">
@@ -38,9 +39,7 @@
                 $('.datepicker').datepicker({
                     format: 'mmmm, yyyy'
                 });
-                $(document).ready(function () {
-                    $('.tooltipped').tooltip();
-                });
+                $('.tooltipped').tooltip();
             });
         </script>
     </div>

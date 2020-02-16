@@ -19,6 +19,12 @@ mongo = PyMongo(app)
 
 
 @app.route('/')
+def main():
+    return render_template('main.html',
+                           tracks=mongo.db.tracks.find().sort("total_votes", -1),
+                           users=mongo.db.users.find())
+
+
 @app.route('/get_tracks')
 def get_tracks():
     return render_template('tracks.html',
@@ -32,6 +38,19 @@ def add_track():
                            users=mongo.db.users.find(),
                            styles=mongo.db.styles.find(),
                            methods=mongo.db.methods.find())
+
+
+@app.route('/add_user')
+def add_user():
+    return render_template('adduser.html')
+
+
+@app.route('/insert_user', methods=['POST'])
+def insert_user():
+    users = mongo.db.users
+    user = request.form.to_dict()
+    users.insert_one(user)
+    return redirect(url_for('get_tracks'))
 
 
 @app.route('/insert_track', methods=['POST'])
