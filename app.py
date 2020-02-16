@@ -129,7 +129,7 @@ def insert_vote(track_id):
 @app.route('/reset_contest')
 def reset_contest():
     tracks = mongo.db.tracks
-    tracks.drop()
+    """tracks.drop()"""
     return redirect(url_for('get_tracks'))
 
 
