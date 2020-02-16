@@ -1,8 +1,9 @@
 import os
 from os import path
+from datetime import datetime
 from flask import Flask, render_template, redirect, request, url_for
 
-# special mongo library for flask
+""" special mongo library for flask """
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
@@ -45,25 +46,33 @@ def add_user():
     return render_template('adduser.html')
 
 
+@app.route('/insert_track', methods=['POST'])
+def insert_track():
+    tracks = mongo.db.tracks
+    """ request to get the form, converted to dict """
+    track = request.form.to_dict()
+    """ Get soundcloud embed code """
+    embed_code = track['soundcloud']
+    """ strip the track number so we can use our own modified embed code """
+    track_position = embed_code.find('track')
+    track['soundcloud'] = embed_code[track_position+7:track_position+16]
+    """ get the current date and time, and add to the track """
+    now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+    track.update({'timestamp': now})
+    """ insert track in database and return to the track overview page """
+    tracks.insert_one(track)
+    return redirect(url_for('get_tracks'))
+
+
 @app.route('/insert_user', methods=['POST'])
 def insert_user():
     users = mongo.db.users
     user = request.form.to_dict()
+    """ get the current date and time, and add to the user record """
+    now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+    user.update({'timestamp': now})
+    """ insert user in database and return to the track overview page """
     users.insert_one(user)
-    return redirect(url_for('get_tracks'))
-
-
-@app.route('/insert_track', methods=['POST'])
-def insert_track():
-    tracks = mongo.db.tracks
-    # request to get the form, converted to dict
-    track = request.form.to_dict()
-    # Get soundcloud embed code
-    embed_code = track['soundcloud']
-    # strip the track number so we can use our own modified embed code
-    track_position = embed_code.find('track')
-    track['soundcloud'] = embed_code[track_position+7:track_position+16]
-    tracks.insert_one(track)
     return redirect(url_for('get_tracks'))
 
 
@@ -91,7 +100,7 @@ def insert_vote(track_id):
                           'vote': int(request.form.get('vote')),
                           'motivation': request.form.get('motivation')
                       }}})
-    # add the vote to the total for this track
+    """ add the vote to the total for this track """
     tracks.update_one({'_id': ObjectId(track_id)},
                       {'$inc': {'total_votes': int(request.form.get('vote'))}})
 
@@ -101,4 +110,4 @@ def insert_vote(track_id):
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=False)
+            debug=True)
