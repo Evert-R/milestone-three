@@ -28,9 +28,13 @@ def main():
 
 @app.route('/get_tracks')
 def get_tracks():
-    return render_template('tracks.html',
-                           tracks=mongo.db.tracks.find().sort("total_votes", -1),
-                           users=mongo.db.users.find())
+    if mongo.db.tracks.count_documents({}) == 0:
+        return render_template('tracks.html',
+                               no_tracks=True)
+    else:
+        return render_template('tracks.html',
+                               tracks=mongo.db.tracks.find().sort("total_votes", -1),
+                               users=mongo.db.users.find())
 
 
 @app.route('/add_track')
@@ -39,11 +43,6 @@ def add_track():
                            users=mongo.db.users.find(),
                            styles=mongo.db.styles.find(),
                            methods=mongo.db.methods.find())
-
-
-@app.route('/add_user')
-def add_user():
-    return render_template('adduser.html')
 
 
 @app.route('/insert_track', methods=['POST'])
@@ -58,10 +57,47 @@ def insert_track():
     track['soundcloud'] = embed_code[track_position+7:track_position+16]
     """ get the current date and time, and add to the track """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-    track.update({'timestamp': now})
+    track.update({'submitted': now})
     """ insert track in database and return to the track overview page """
     tracks.insert_one(track)
     return redirect(url_for('get_tracks'))
+
+
+@app.route('/view_track/<track_id>')
+def view_track(track_id):
+    return render_template('viewtrack.html',
+                           track=mongo.db.tracks.find_one(
+                               {"_id": ObjectId(track_id)}),
+                           users=mongo.db.users.find(),
+                           styles=mongo.db.styles.find(),
+                           methods=mongo.db.methods.find())
+
+
+@app.route('/update_track/<track_id>', methods=['POST'])
+def update_track(track_id):
+    tracks = mongo.db.tracks
+    """ get the current date and time, and add to the user record """
+    now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
+    """ insert user in database and return to the track overview page """
+    tracks.update({"_id": ObjectId(track_id)},
+                  {'$set':
+                   {'artist_name': request.form.get('artist_name'),
+                    'title': request.form.get('title'),
+                    'style': request.form.get('style'),
+                    'free_text': request.form.get('free_text'),
+                    'creation_method': request.form.get('creation_method'),
+                    'credits_who': request.form.get('credits_who'),
+                    'credits_what': request.form.get('credits_what'),
+                    'creation_date': request.form.get('creation_date'),
+                    'license': request.form.get('license'),
+                    'last_updated': now
+                    }})
+    return redirect(url_for('get_tracks'))
+
+
+@app.route('/add_user')
+def add_user():
+    return render_template('adduser.html')
 
 
 @app.route('/insert_user', methods=['POST'])
@@ -70,7 +106,7 @@ def insert_user():
     user = request.form.to_dict()
     """ get the current date and time, and add to the user record """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-    user.update({'timestamp': now, 'last_updated': now})
+    user.update({'registered': now, 'last_updated': now})
     """ insert user in database and return to the track overview page """
     users.insert_one(user)
     return redirect(url_for('get_tracks'))
@@ -90,15 +126,16 @@ def update_user(user_id):
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
     """ insert user in database and return to the track overview page """
     users.update({"_id": ObjectId(user_id)},
-                 {'user_name': request.form.get('user_name'),
-                  'user_email': request.form.get('user_email'),
-                  'profile_pic': request.form.get('profile_pic'),
-                  'user_city': request.form.get('user_city'),
-                  'user_country': request.form.get('user_country'),
-                  'user_website': request.form.get('user_website'),
-                  'mailing_list': request.form.get('mailing_list'),
-                  'last_updated': now
-                  })
+                 {'$set':
+                  {'user_name': request.form.get('user_name'),
+                   'user_email': request.form.get('user_email'),
+                   'profile_pic': request.form.get('profile_pic'),
+                   'user_city': request.form.get('user_city'),
+                   'user_country': request.form.get('user_country'),
+                   'user_website': request.form.get('user_website'),
+                   'mailing_list': request.form.get('mailing_list'),
+                   'last_updated': now
+                   }})
     return redirect(url_for('get_tracks'))
 
 

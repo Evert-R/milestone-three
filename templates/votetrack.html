@@ -1,57 +1,63 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Vote for this track</h1>
-
-{{track._id}}
-
 <div class="row">
-    <div>
-        <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
+    <div class="col s12 er-dark z-depth-5">
+        <h1 class="center-align">Vote for {{ track.title }}</h1>
     </div>
-
 </div>
 
 <div class="row">
-    <form action="{{ url_for('insert_vote', track_id=track._id) }}" method="POST" class="col s12">
+    <div class="col s12 er-light">
+        <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
+    </div>
+</div>
 
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">account_circle</i>
-                <select id="user" name="user">
-                    <option value="" disabled selected>What's your username ?</option>
-                    {% for user in users %}
-                    <option value="{{user._id}},{{user.user_name}}">{{user.user_name}}</option>
-                    {% endfor %}
-                </select>
-                <label>Username</label>
-            </div>
+<div class="er-wrapper">
+    <div class="row">
+        <div class="col s12 er-light z-depth-5">
+            <br>
+            <form action="{{ url_for('insert_vote', track_id=track._id) }}" method="POST" class="col s12">
+
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">account_circle</i>
+                        <select id="user" name="user" required="" aria-required="true">
+                            <option value="" disabled selected>What's your username ?</option>
+                            {% for user in users %}
+                            <option value="{{user._id}},{{user.user_name}}">{{user.user_name}}</option>
+                            {% endfor %}
+                        </select>
+                        <label>Username</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <i class="material-icons">star</i>
+                    <p class="range-field">
+                        <input type="range" id="vote" name="vote" min="1" max="10" required="" aria-required="true" />
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">subject</i>
+                        <textarea placeholder="Tell us a little about the what, why, when and how" id="motivation"
+                            name="motivation" class="materialize-textarea" required="" aria-required="true"></textarea>
+                        <label for="motivation">Free text</label>
+                    </div>
+                </div>
+
+
+
+                <div class="row">
+                    <button class="btn waves-effect waves-light blue-grey darken-3" type="submit">Vote
+                        <i class="material-icons right">playlist_add</i>
+                    </button>
+                </div>
+
+            </form>
         </div>
-        <div class="row">
-            <i class="material-icons">star</i>
-            <p class="range-field">
-                <input type="range" id="vote" name="vote" min="1" max="10" />
-            </p>
-        </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">subject</i>
-                <textarea placeholder="Tell us a little about the what, why, when and how" id="motivation"
-                    name="motivation" class="materialize-textarea"></textarea>
-                <label for="motivation">Free text</label>
-            </div>
-        </div>
-
-
-
-        <div class="row">
-            <button class="btn waves-effect waves-light" type="submit">Add your track
-                <i class="material-icons right">playlist_add</i>
-            </button>
-        </div>
-
-    </form>
+    </div>
 </div>
 
 {% endblock %}

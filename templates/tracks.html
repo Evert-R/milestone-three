@@ -1,16 +1,30 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-    <div class="col s12">
+    <div class="col s12 er-dark z-depth-3">
+
         <h1 class="center-align">Tracks in this contest</h1>
+
     </div>
 </div>
+
+{% if no_tracks %}
+
+<div class="row">
+    <div class="col s12 er-light">
+        No tracks found
+    </div>
+</div>
+
+{% else %}
+
+
 {% for track in tracks %}
 {# Split username in _id and name #}
 {% set current_user = track.user.split(',') %}
 
 <div class="row">
-    <div class="col s12">
+    <div class="col s12 er-light">
         <ul class="collapsible">
             <li>
                 <div>
@@ -20,14 +34,18 @@
             </li>
             <li>
                 <div class="collapsible-header">
-                    <i class="material-icons">info</i>{{track.artist_name}} - {{track.title}}
+                    <i class="material-icons er-left">info</i>{{track.artist_name}} - {{track.title}}
+                    <a href="{{url_for('view_track', track_id=track._id)}}"
+                        class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Edit</a>
                 </div>
+
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="col s12 m6">
                             <p>
                                 {{ track.artist_name }}: {{track.free_text}}
                             </p>
+
                         </div>
                         <div class="col s12 m6">
                             <p>
@@ -44,7 +62,7 @@
                         <div class="col s12">
                             <p class="er-center">This track was submitted by <a
                                     href="{{url_for('view_user', user_id=current_user[0])}}" name="View user details">
-                                    {{ current_user[1] }} </a> on {{ track.timestamp }} </p>
+                                    {{ current_user[1] }} </a> on {{ track.submitted }} </p>
                         </div>
                     </div>
                 </div>
@@ -53,7 +71,8 @@
             <li>
                 <div class="collapsible-header">
                     <i class="material-icons">info</i>Votes
-                    <span class="er-right">Total score: {{track.total_votes}}</span>
+                    <a href="{{url_for('vote_track', track_id=track._id)}}"
+                        class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
                 </div>
                 <div class="collapsible-body">
                     <div class="row">
@@ -76,13 +95,16 @@
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <a href="{{url_for('vote_track', track_id=track._id)}}"
-                        class="waves-effect waves-light btn btn_small grey">Vote for this track</a>
+
                 </div>
             </li>
         </ul>
+        <div>
+            <span class="er-right">Total score: {{track.total_votes}}</span>
+        </div>
     </div>
 </div>
 
 {% endfor %}
+{% endif %}
 {% endblock %}
