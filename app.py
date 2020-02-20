@@ -163,6 +163,27 @@ def insert_vote(track_id):
     return redirect(url_for('get_tracks'))
 
 
+@app.route('/edit_methods')
+def edit_methods():
+    return render_template('editmethods.html',
+                           methods=mongo.db.methods.find())
+
+
+@app.route('/insert_method', methods=['POST'])
+def insert_method():
+    method = request.form.to_dict()
+    methods = mongo.db.methods
+    methods.insert_one(method)
+    return redirect(url_for('edit_methods'))
+
+
+@app.route('/delete_method/<method_id>')
+def delete_method(method_id):
+    methods = mongo.db.methods
+    methods.delete_one({'_id': ObjectId(method_id)})
+    return redirect(url_for('edit_methods'))
+
+
 @app.route('/reset_contest')
 def reset_contest():
     tracks = mongo.db.tracks

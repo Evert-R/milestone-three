@@ -12,7 +12,7 @@ p {
     text-align: justify;
 }
 
-p a {
+p a, table a {
     color: rgba(0, 0, 0, 0.90);
 }
 

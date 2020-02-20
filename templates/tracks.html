@@ -70,37 +70,47 @@
             </li>
             <li>
                 <div class="collapsible-header">
-                    <i class="material-icons">info</i>Votes
+                    <i class="material-icons">keyboard_arrow_down</i>Votes
                     <a href="{{url_for('vote_track', track_id=track._id)}}"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
                 </div>
                 <div class="collapsible-body">
                     <div class="row">
-                        {% for vote in track.votes %}
-                        {% if vote.voted_user %}
-                        {# Split voted username in _id and name #}
-                        {% set current_voter = vote.voted_user.split(',') %}
+                        <table class="striped">
+                            {% for vote in track.votes %}
+                            {% if vote.voted_user %}
+                            {# Split voted username in _id and name #}
+                            {% set current_voter = vote.voted_user.split(',') %}
 
-                        <div class="col s2">
-                            <a href="{{url_for('view_user', user_id=current_voter[0])}}" name="View user details">
-                                {{ current_voter[1] }} </a>
-                        </div>
-                        <div class="col s2">
-                            {{ vote.vote }}
-                        </div>
-                        <div class="col s8">
-                            {{ vote.motivation }}
-                        </div>
+                            <tr>
+                                <td>
+                                    <a href="{{url_for('view_user', user_id=current_voter[0])}}"
+                                        name="View user details">
+                                        {{ current_voter[1] }}:</a>
+                                </td>
+                                <td>
+                                    {{ vote.vote }} points
+                                </td>
+                                <td class="right-align">
+                                    {{ vote.motivation }}
+                                </td>
+                            </tr>
 
-                        {% endif %}
-                        {% endfor %}
+                            {% endif %}
+                            {% endfor %}
+                        </table>
                     </div>
 
                 </div>
             </li>
         </ul>
-        <div>
-            <span class="er-right">Total score: {{track.total_votes}}</span>
+        <div class="row">
+            <div class="col s6">
+                <p class="left-align">Total score: {{track.total_votes}}</p>
+            </div>
+            <div class="col s6">
+                <p class="right-align">Total score: {{track.total_votes}}</p>
+            </div>
         </div>
     </div>
 </div>
