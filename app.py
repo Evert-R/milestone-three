@@ -184,6 +184,27 @@ def delete_method(method_id):
     return redirect(url_for('edit_methods'))
 
 
+@app.route('/edit_styles')
+def edit_styles():
+    return render_template('editstyles.html',
+                           styles=mongo.db.styles.find())
+
+
+@app.route('/insert_style', methods=['POST'])
+def insert_style():
+    style = request.form.to_dict()
+    styles = mongo.db.styles
+    styles.insert_one(style)
+    return redirect(url_for('edit_styles'))
+
+
+@app.route('/delete_style/<style_id>')
+def delete_style(style_id):
+    styles = mongo.db.styles
+    styles.delete_one({'_id': ObjectId(style_id)})
+    return redirect(url_for('edit_styles'))
+
+
 @app.route('/reset_contest')
 def reset_contest():
     tracks = mongo.db.tracks
@@ -194,4 +215,4 @@ def reset_contest():
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=False)
+            debug=True)

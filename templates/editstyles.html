@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col s12 er-dark z-depth-5">
+        <h1 class="center-align">Edit styles</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 er-light">
+        <table class="striped">
+            <form action="{{ url_for('insert_style') }}" method="POST">
+                <tr>
+                    <td>
+                        <i class="material-icons prefix">palette</i>
+                        <input placeholder="Add a style" id="style" name="style" type="text" class="validate"
+                            required="" aria-required="true">
+
+                    </td>
+                    <td class="right-align">
+                        <button class="btn waves-effect waves-light blue-grey darken-3" type="submit">Add
+                        </button>
+                    </td>
+                </tr>
+            </form>
+            <tr>
+                <td><br></td>
+                <td><br></td>
+            </tr>
+            {% for style in styles %}
+
+            <tr>
+                <td>
+                    {{ style.style }}
+                </td>
+                <td class="right-align">
+                    <a href="{{url_for('delete_style', style_id=style._id)}}"
+                        class="waves-effect waves-light btn btn_flat blue-grey darken-3">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
