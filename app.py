@@ -45,7 +45,8 @@ def activate_user():
 
 @app.route('/logout')
 def logout():
-    session.pop('active_user', None)
+    session.pop('user_id', None)
+    session.pop('user_name', None)
     return render_template('main.html')
 
 
@@ -80,7 +81,8 @@ def insert_track():
     track['soundcloud'] = embed_code[track_position+7:track_position+16]
     """ get the current date and time, and add to the track """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-    track.update({'submitted': now})
+    track.update(
+        {'user': session['user_name'], 'user_id': session['user_id'], 'submitted': now})
     """ insert track in database and return to the track overview page """
     tracks.insert_one(track)
     return redirect(url_for('get_tracks'))
@@ -175,7 +177,8 @@ def insert_vote(track_id):
     tracks = mongo.db.tracks
     tracks.update_one({'_id': ObjectId(track_id)},
                       {'$push': {'votes': {
-                          'voted_user': request.form.get('user'),
+                          'user': session['user_name'],
+                          'user_id': session['user_id'],
                           'vote': int(request.form.get('vote')),
                           'motivation': request.form.get('motivation')
                       }}})

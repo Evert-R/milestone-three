@@ -13,13 +13,8 @@
             <div class="row">
                 <div class="input-field col s12 m6">
                     <i class="material-icons prefix">account_circle</i>
-                    <select id="user" name="user" required="" aria-required="true">
-                        <option value="" disabled selected>What's your username ?</option>
-                        {% for user in users %}
-                        <option value="{{user._id}},{{user.user_name}}">{{user.user_name}}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Username:</label>
+                    <input value="{{ session['user_name'] }}" id="user" name="user" type="text" readonly>
+                    <label for="user_name">User name:</label>
                 </div>
                 <div class="input-field col s12 m6">
                     <i class="material-icons prefix">face</i>

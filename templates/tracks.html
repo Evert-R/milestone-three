@@ -20,8 +20,6 @@
 
 
 {% for track in tracks %}
-{# Split username in _id and name #}
-{% set current_user = track.user.split(',') %}
 
 <div class="row">
     <div class="col s12 er-light">
@@ -61,8 +59,8 @@
                     <div class="row">
                         <div class="col s12">
                             <p class="er-center">This track was submitted by <a
-                                    href="{{url_for('view_user', user_id=current_user[0])}}" name="View user details">
-                                    {{ current_user[1] }} </a> on {{ track.submitted }} </p>
+                                    href="{{url_for('view_user', user_id=track.user_id)}}" name="View user details">
+                                    {{ track.user }} </a> on {{ track.submitted }} </p>
                         </div>
                     </div>
                 </div>
@@ -78,15 +76,10 @@
                     <div class="row">
                         <table class="striped">
                             {% for vote in track.votes %}
-                            {% if vote.voted_user %}
-                            {# Split voted username in _id and name #}
-                            {% set current_voter = vote.voted_user.split(',') %}
-
                             <tr>
                                 <td>
-                                    <a href="{{url_for('view_user', user_id=current_voter[0])}}"
-                                        name="View user details">
-                                        {{ current_voter[1] }}:</a>
+                                    <a href="{{url_for('view_user', user_id=vote.user_id)}}" name="View user details">
+                                        {{ vote.user }}:</a>
                                 </td>
                                 <td>
                                     {{ vote.vote }} points
@@ -95,8 +88,6 @@
                                     {{ vote.motivation }}
                                 </td>
                             </tr>
-
-                            {% endif %}
                             {% endfor %}
                         </table>
                     </div>
