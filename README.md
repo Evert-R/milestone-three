@@ -1,10 +1,11 @@
-# Track competition
+# Crowd finding
+## Web application to host a music competition
+### Milestone project 3 for Code Institute
 
 ### Deployed version 
-[https://evert-r.github.io/milestone-one](https://evert-r.github.io/milestone-one)
+[https://crowd-finding.herokuapp.com/](https://crowd-finding.herokuapp.com/)
 
-
-
+The purpose of this application is to host a competition of musical tracks for starting musicians. Artists can post a track that they’ve hosted on soundcloud. Visitors of the website can then vote on wich track they think is the best and leave a short motivation as to why they like the track. After a pre-defined period of time the website owner can take the best voted 5 songs and distribute these as an album on spotify, itunes and vinyl. The app will also give insight on why some tracks are liked more than others.  In addition the owner will build up a database of e-mail addresses of interested users to use for targeted advertising.
 
 ## Technologies Used
 - [VSCode](https://code.visualstudio.com)
@@ -37,8 +38,16 @@
     - Converting music from Wav to Mp3 and FLAC
 
 ## Deployment
+
+``` git clone https://github.com/Evert-R/milestone-three ```
+``` git remote rename origin destination ```
+``` git remote -v ```
+``` git remote add origin <url of the new repository>```
+``` git push origin master ```
+
+
 ### Github Pages
-This project was deployed via heroku from the ```master branch```
+This project was deployed on heroku from the ```master branch```
 
 #### This was done following this procedure:
 1. Goto the apps page on Heoku: [Heroku](https://dashboard.heroku.com/apps)

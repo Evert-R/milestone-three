@@ -1,19 +1,22 @@
 import os
 from os import path
 from datetime import datetime
-from flask import Flask, render_template, redirect, request, url_for
+from flask import Flask, render_template, redirect, request, url_for, session
 
 """ special mongo library for flask """
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
-# To protect our credentials: Load MONGO_URI as environment variable if we run local
+""" To protect our credentials: Load MONGO_URI and secret_key as environment variables if we run local """
 if path.exists("env.py"):
     import env
 
 app = Flask(__name__)
 app.config["MONGO_DBNAME"] = 'track_competition'
 app.config["MONGO_URI"] = os.getenv('MONGO_URI', 'mongodb://localhost')
+
+""" Get secret key to enable sessions """
+app.secret_key = os.getenv('secret_key')
 
 # Create pymongo instance of app (constructor method)
 mongo = PyMongo(app)
@@ -24,6 +27,26 @@ def main():
     return render_template('main.html',
                            tracks=mongo.db.tracks.find().sort("total_votes", -1),
                            users=mongo.db.users.find())
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html',
+                           users=mongo.db.users.find())
+
+
+@app.route('/activate_user', methods=['POST'])
+def activate_user():
+    user = request.form.get('user').split(',')
+    session['user_id'] = user[0]
+    session['user_name'] = user[1]
+    return render_template('tracks.html')
+
+
+@app.route('/logout')
+def logout():
+    session.pop('active_user', None)
+    return render_template('main.html')
 
 
 @app.route('/get_tracks')
@@ -215,4 +238,4 @@ def reset_contest():
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=True)
+            debug=False)
