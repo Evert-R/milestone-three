@@ -33,8 +33,11 @@
             <li>
                 <div class="collapsible-header">
                     <i class="material-icons er-left">info</i>{{track.artist_name}} - {{track.title}}
+                    {# only show edit button to the submitter or the administrator #}
+                    {% if track.user_id|replace(' ', '') == session['user_id']|replace(' ', '') or session['user_name'] == 'administrator' %}
                     <a href="{{url_for('view_track', track_id=track._id)}}"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Edit</a>
+                    {% endif %}
                 </div>
 
                 <div class="collapsible-body">
@@ -106,6 +109,11 @@
     </div>
 </div>
 
+
+
+
+
 {% endfor %}
 {% endif %}
+
 {% endblock %}
