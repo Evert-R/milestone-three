@@ -43,6 +43,16 @@ select {
 .er-dark {
     background-color: rgba(0, 0, 0, 0.60);
     border-radius: 0.3rem;
+    color: white;
+}
+
+.er-darker {
+    background-color: rgba(28, 29, 30);
+    color: white;
+}
+
+.er-dark li>a {
+    color: white;
 }
 
 .er-light {
@@ -51,9 +61,16 @@ select {
     border-radius: 0.3rem;
 }
 
-.dropdown-content li span {
-    font-size: 1rem;
-    color: black!important;
+.sidenav li>a {
+    color: white;
+}
+
+.dropdown-content li>a {
+    color: white;
+}
+
+.dropdown-content li>span {
+    color: rgba(0, 0, 0, 0.90);
 }
 
 .datepicker-date-display {
