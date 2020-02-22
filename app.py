@@ -24,9 +24,13 @@ mongo = PyMongo(app)
 
 @app.route('/')
 def main():
+    current_contest = mongo.db.users.find_one(
+        {'user_name': 'administrator'})
+    session['start_date'] = current_contest['start_date']
+    session['end_date'] = current_contest['end_date']
     return render_template('main.html',
                            tracks=mongo.db.tracks.find().sort("total_votes", -1),
-                           users=mongo.db.users.find())
+                           )
 
 
 @app.route('/login')
@@ -40,14 +44,30 @@ def activate_user():
     user = request.form.get('user').split(',')
     session['user_id'] = user[0]
     session['user_name'] = user[1]
-    return render_template('tracks.html')
+    return redirect(url_for('get_tracks'))
 
 
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     session.pop('user_name', None)
-    return render_template('main.html')
+    return redirect(url_for('get_tracks'))
+
+
+@app.route('/start_contest')
+def start_contest():
+    return render_template('startcontest.html')
+
+
+@app.route('/insert_contest', methods=['POST'])
+def insert_contest():
+    users = mongo.db.users
+    users.update_one({'user_name': 'administrator'},
+                     {'$set': {
+                         'start_date': request.form.get('start_date'),
+                         'end_date': request.form.get('end_date')
+                     }})
+    return redirect(url_for('get_tracks'))
 
 
 @app.route('/get_tracks')
@@ -58,7 +78,23 @@ def get_tracks():
     else:
         return render_template('tracks.html',
                                tracks=mongo.db.tracks.find().sort("total_votes", -1),
-                               users=mongo.db.users.find())
+                               users=mongo.db.users.find(),
+                               styles=mongo.db.styles.find(),
+                               methods=mongo.db.methods.find())
+
+
+@app.route('/get_tracks_filtered', methods=['POST'])
+def get_tracks_filtered():
+    if request.form.get('style'):
+        filter_by = {"style": request.form.get('style')}
+    if request.form.get('creation_method'):
+        filter_by = {"creation_method": request.form.get('creation_method')}
+    return render_template('tracks.html',
+                           tracks=mongo.db.tracks.find(
+                               filter_by).sort("total_votes", -1),
+                           users=mongo.db.users.find(),
+                           styles=mongo.db.styles.find(),
+                           methods=mongo.db.methods.find())
 
 
 @app.route('/add_track')
@@ -134,7 +170,7 @@ def insert_user():
     user.update({'registered': now, 'last_updated': now})
     """ insert user in database and return to the track overview page """
     users.insert_one(user)
-    return redirect(url_for('get_tracks'))
+    return redirect(url_for('login'))
 
 
 @app.route('/view_user/<user_id>')

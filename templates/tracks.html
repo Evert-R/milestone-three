@@ -18,6 +18,59 @@
 
 {% else %}
 
+<div class="row">
+    <div class="col s12 er-light z-depth-5">
+        <ul class="collapsible">
+            <li>
+                <div class="collapsible-header er-small">
+                    <table>
+                        <tr>
+                            <td class="er-small">
+                                <span><i class="material-icons">keyboard_arrow_down</i></span>
+                            </td>
+                            <td class="center-align er-small">
+                                <span>Filter these results :</Filter></span>
+                            </td>
+                            <td class="right-align er-small">
+                                <span><i class="material-icons">keyboard_arrow_down</i></span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row collapsible-body">
+                    <form action="{{url_for('get_tracks_filtered')}}" method="POST">
+                        <div class="input-field col s12 m6">
+                            <i class="material-icons prefix">hearing</i>
+                            <select onchange="this.form.submit()" id="style" name="style">
+                                <option value="- - -" selected>- - -</option>
+                                {% for style in styles %}
+                                <option value="{{style.style}}">{{style.style}}</option>
+                                {% endfor %}
+                            </select>
+                            <label>Style:</label>
+                        </div>
+                    </form>
+                    <form action="{{url_for('get_tracks_filtered')}}" method="POST">
+                        <div class="input-field col s12 m6">
+                            <i class="material-icons prefix">palette</i>
+                            <select onchange="this.form.submit()" id="creation_method" name="creation_method">
+                                <option value="- - -" selected>- - -</option>
+                                {% for method in methods %}
+                                <option value="{{method.method}}">{{method.method}}</option>
+                                {% endfor %}
+                            </select>
+                            <label>Creation method:</label>
+                        </div>
+                    </form>
+                </div>
+            </li>
+        </ul>
+
+
+    </div>
+</div>
+
 
 {% for track in tracks %}
 

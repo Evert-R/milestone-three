@@ -28,6 +28,7 @@
                         <li><a href="{{url_for('logout')}}">Logout</a><br></li>
                         {# administrator only section #}
                         {% if session['user_name'] == 'administrator' %}
+                        <li><a href="{{url_for('start_contest')}}">Start contest</a><br></li>
                         <li><a href="{{url_for('edit_methods')}}">Edit methods</a><br></li>
                         <li><a href="{{url_for('edit_styles')}}">Edit styles</a><br></li>
                         <li><a href="{{url_for('reset_contest')}}">Delete all tracks</a><br></li>
@@ -48,6 +49,7 @@
             <li><a href="{{url_for('logout')}}">Logout</a><br></li>
             {# administrator only section #}
             {% if session['user_name'] == 'administrator' %}
+            <li><a href="{{url_for('start_contest')}}">Start contest</a><br></li>
             <li><a href="{{url_for('edit_methods')}}">Edit methods</a><br></li>
             <li><a href="{{url_for('edit_styles')}}">Edit styles</a><br></li>
             <li><a href="{{url_for('reset_contest')}}">Delete all tracks</a><br></li>
@@ -73,7 +75,7 @@
                 $('.collapsible').collapsible();
                 $('select').formSelect();
                 $('.datepicker').datepicker({
-                    format: 'mmmm, yyyy'
+                    format: 'dd-mm-yyyy'
                 });
                 $('.tooltipped').tooltip();
             });

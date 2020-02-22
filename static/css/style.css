@@ -31,16 +31,23 @@ h2 {
     font-size: 1.2rem;
 }
 
+select {
+    z-index: 1000;
+}
+
+.er-small {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
 .er-dark {
     background-color: rgba(0, 0, 0, 0.60);
-    overflow: hidden;
     border-radius: 0.3rem;
 }
 
 .er-light {
     padding: 1rem 0.5rem 1rem 0.5rem;
     background-color: rgba(245, 245, 245, 0.9);
-    overflow: hidden;
     border-radius: 0.3rem;
 }
 
@@ -70,7 +77,8 @@ h2 {
 }
 
 .er-center {
-    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .er-right {
