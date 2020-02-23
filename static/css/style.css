@@ -1,6 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Krona+One&display=swap');
 html {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.9em;
+    font-size: 0.8em;
     background-image: url("/static/images/krypto_23.jpg");
     background-repeat: repeat;
     background-size: cover;
@@ -8,12 +9,13 @@ html {
 }
 
 p {
-    font-size: 1rem;
+    font-weight: 100;
     text-align: justify;
 }
 
 p a, table a {
     color: rgba(0, 0, 0, 0.90);
+    font-weight: 900;
 }
 
 a, a:visited, a:active {
@@ -23,7 +25,7 @@ a, a:visited, a:active {
 h1 {
     font-size: 2rem;
     padding-bottom: 1.5rem;
-    color: white;
+    color: rgba(255, 0, 0);
     letter-spacing: 0.3rem;
 }
 
@@ -33,6 +35,21 @@ h2 {
 
 select {
     z-index: 1000;
+}
+
+.er-logo {
+    font-family: 'Krona One';
+}
+
+.er-inner-wrap {
+    margin: 1rem;
+    box-sizing: content-box;
+    border-radius: 1rem;
+    background-color: rgba(120, 122, 144, 0.3);
+}
+
+.er-inner-wrap p {
+    font-size: 0.9rem;
 }
 
 .er-small {
@@ -53,6 +70,10 @@ select {
 
 .er-dark li>a {
     color: white;
+}
+
+.er-active a {
+    color: rgba(255, 0, 0);
 }
 
 .er-light {

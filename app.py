@@ -36,7 +36,7 @@ def main():
 @app.route('/login')
 def login():
     return render_template('login.html',
-                           users=mongo.db.users.find())
+                           users=mongo.db.users.find().sort('user_name'))
 
 
 @app.route('/activate_user', methods=['POST'])
@@ -78,9 +78,9 @@ def get_tracks():
     else:
         return render_template('tracks.html',
                                tracks=mongo.db.tracks.find().sort("total_votes", -1),
-                               users=mongo.db.users.find(),
-                               styles=mongo.db.styles.find(),
-                               methods=mongo.db.methods.find())
+                               users=mongo.db.users.find().sort('user_name'),
+                               styles=mongo.db.styles.find().sort('style'),
+                               methods=mongo.db.methods.find().sort('method'))
 
 
 @app.route('/get_tracks_filtered', methods=['POST'])
@@ -92,17 +92,17 @@ def get_tracks_filtered():
     return render_template('tracks.html',
                            tracks=mongo.db.tracks.find(
                                filter_by).sort("total_votes", -1),
-                           users=mongo.db.users.find(),
-                           styles=mongo.db.styles.find(),
-                           methods=mongo.db.methods.find())
+                           users=mongo.db.users.find().sort('user_name'),
+                           styles=mongo.db.styles.find().sort('style'),
+                           methods=mongo.db.methods.find().sort('method'))
 
 
 @app.route('/add_track')
 def add_track():
     return render_template('addtrack.html',
                            users=mongo.db.users.find(),
-                           styles=mongo.db.styles.find(),
-                           methods=mongo.db.methods.find())
+                           styles=mongo.db.styles.find().sort('style'),
+                           methods=mongo.db.methods.find().sort('method'))
 
 
 @app.route('/insert_track', methods=['POST'])
@@ -129,9 +129,9 @@ def view_track(track_id):
     return render_template('viewtrack.html',
                            track=mongo.db.tracks.find_one(
                                {"_id": ObjectId(track_id)}),
-                           users=mongo.db.users.find(),
-                           styles=mongo.db.styles.find(),
-                           methods=mongo.db.methods.find())
+                           users=mongo.db.users.find().sort('user_name'),
+                           styles=mongo.db.styles.find().sort('style'),
+                           methods=mongo.db.methods.find().sort('method'))
 
 
 @app.route('/update_track/<track_id>', methods=['POST'])
@@ -204,8 +204,7 @@ def update_user(user_id):
 def vote_track(track_id):
     voted_track = mongo.db.tracks.find_one({"_id": ObjectId(track_id)})
     return render_template('votetrack.html',
-                           track=voted_track,
-                           users=mongo.db.users.find())
+                           track=voted_track)
 
 
 @app.route('/insert_vote/<track_id>', methods=['POST'])
@@ -228,7 +227,7 @@ def insert_vote(track_id):
 @app.route('/edit_methods')
 def edit_methods():
     return render_template('editmethods.html',
-                           methods=mongo.db.methods.find())
+                           methods=mongo.db.methods.find().sort('method'))
 
 
 @app.route('/insert_method', methods=['POST'])
@@ -249,7 +248,7 @@ def delete_method(method_id):
 @app.route('/edit_styles')
 def edit_styles():
     return render_template('editstyles.html',
-                           styles=mongo.db.styles.find())
+                           styles=mongo.db.styles.find().sort('style'))
 
 
 @app.route('/insert_style', methods=['POST'])

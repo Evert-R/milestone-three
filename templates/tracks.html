@@ -85,7 +85,7 @@
             </li>
             <li>
                 <div class="collapsible-header">
-                    <i class="material-icons er-left">info</i>{{track.artist_name}} - {{track.title}}
+                    <i class="material-icons er-left">keyboard_arrow_down</i>{{track.artist_name}} - {{track.title}}
                     {# only show edit button to the submitter or the administrator #}
                     {% if track.user_id|replace(' ', '') == session['user_id']|replace(' ', '') or session['user_name'] == 'administrator' %}
                     <a href="{{url_for('view_track', track_id=track._id)}}"
@@ -95,28 +95,26 @@
 
                 <div class="collapsible-body">
                     <div class="row">
-                        <div class="col s12 m6">
-                            <p>
-                                {{ track.artist_name }}: {{track.free_text}}
-                            </p>
-
+                        <div class="col s9 er-inner-wrap">
+                            <h2>{{ track.artist_name }}:</h2>
+                            <p>{{track.free_text}}</p>
                         </div>
-                        <div class="col s12 m6">
+                        <div class="col s9 offset-s3 er-inner-wrap">
                             <p>
-                                {{ track.title }} is a {{ track.style.lower() }} track made by {{ track.artist_name }}.
+                                {{ track.title }} is a {{ track.style.lower() }} track made by
+                                {{ track.artist_name }}.
                                 It was created in {{ track.creation_date }} and was made using
-                                {{ track.creation_method.lower() }}. Credits go to {{ track.credits_who }} for
-                                {{ track.credits_what }}. This work is
-                                licensed under
-                                {{ track.license }}.<br>
+                                {{ track.creation_method.lower() }}.
+                                Credits go to {{ track.credits_who }} for {{ track.credits_what }}.
                             </p>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12">
-                            <p class="er-center">This track was submitted by <a
+                        <div class="col s12 er-inner-wrap">
+                            <p class="center-align">This track was submitted by <a
                                     href="{{url_for('view_user', user_id=track.user_id)}}" name="View user details">
-                                    {{ track.user }} </a> on {{ track.submitted }} </p>
+                                    {{ track.user }} </a> on {{ track.submitted }}</p>
+                            <p class="center-align">This work is licensed under {{ track.license }}.</p>
                         </div>
                     </div>
                 </div>
@@ -130,24 +128,26 @@
                 </div>
                 <div class="collapsible-body">
                     <div class="row">
-                        <table class="striped">
-                            {% for vote in track.votes %}
-                            <tr>
-                                <td>
-                                    <a href="{{url_for('view_user', user_id=vote.user_id)}}" name="View user details">
-                                        {{ vote.user }}:</a>
-                                </td>
-                                <td>
-                                    {{ vote.vote }} points
-                                </td>
-                                <td class="right-align">
-                                    {{ vote.motivation }}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </table>
+                        <div class="col s12 er-inner-wrap">
+                            <table>
+                                {% for vote in track.votes %}
+                                <tr>
+                                    <td>
+                                        <a href="{{url_for('view_user', user_id=vote.user_id)}}"
+                                            name="View user details">
+                                            {{ vote.user }}:</a>
+                                    </td>
+                                    <td>
+                                        {{ vote.vote }} points
+                                    </td>
+                                    <td class="right-align">
+                                        {{ vote.motivation }}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
                     </div>
-
                 </div>
             </li>
         </ul>

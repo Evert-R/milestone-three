@@ -19,13 +19,13 @@
 
             <nav class="er-dark">
                 <div class="nav-wrapper">
-                    <a href="{{url_for('main')}}" class="brand-logo right">Crowd Finding</a>
+                    <a href="{{url_for('main')}}" class="brand-logo right er-logo">Crowd Finding</a>
                     <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     <ul id="nav-mobile" class="left hide-on-med-and-down">
                         <li><a href="{{url_for('get_tracks')}}">View all tracks</a></li>
                         <li><a href="{{url_for('add_track')}}">Add a track</a></li>
                         <li><a href="{{url_for('add_user')}}">Register</a></li>
-                        <li><a href="{{url_for('login')}}">Login</a>></li>
+                        <li><a href="{{url_for('login')}}">Login</a></li>
                         <li><a href="{{url_for('logout')}}">Logout</a></li>
                         {% if session['user_name'] %}
                         <li><a href="{{url_for('view_user', user_id=session['user_id'])}}"
