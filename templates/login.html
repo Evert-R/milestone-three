@@ -10,6 +10,10 @@
 <div class="row">
     <div class="col s12 er-light z-depth-5">
         <br>
+        {% if message %}
+        <p class="center-align er-message">{{ message }}</p>
+        <br>
+        {% endif %}
         <form action="{{ url_for('activate_user') }}" method="POST" class="col s12">
             <div class="row">
                 <div class="input-field col s12">
@@ -30,7 +34,8 @@
                 </button>
             </div>
         </form>
-        <p class="center-align"><a href="{{url_for('add_user')}}">If you haven't already, please register here.</a></p>
+        <p class="center-align"><a href="{{url_for('add_user')}}">If
+                you haven't already, please register <span class="er-message">here.</span></a></p>
     </div>
 </div>
 

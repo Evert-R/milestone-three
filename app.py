@@ -2,26 +2,27 @@ import os
 from os import path
 from datetime import datetime
 from flask import Flask, render_template, redirect, request, url_for, session
-
-""" special mongo library for flask """
 from flask_pymongo import PyMongo
 from bson.objectid import ObjectId
 
-""" To protect our credentials: Load MONGO_URI and secret_key as environment variables if we run local """
+# when running local load sensitive environment variables to protect our credentials
 if path.exists("env.py"):
     import env
 
+# create instance of flask, assigned to app
 app = Flask(__name__)
+
+# set mongoDB database
 app.config["MONGO_DBNAME"] = 'track_competition'
 app.config["MONGO_URI"] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
-""" Get secret key to enable sessions """
+# get secret key to enable sessions
 app.secret_key = os.getenv('secret_key')
 
-# Create pymongo instance of app (constructor method)
+# create pymongo instance of app (constructor method)
 mongo = PyMongo(app)
 
-
+# main page with contest info
 @app.route('/')
 def main():
     current_contest = mongo.db.users.find_one(
@@ -32,33 +33,37 @@ def main():
                            tracks=mongo.db.tracks.find().sort("total_votes", -1),
                            )
 
-
+# login page
 @app.route('/login')
 def login():
     return render_template('login.html',
                            users=mongo.db.users.find().sort('user_name'))
 
-
+# process login form and set session vars
 @app.route('/activate_user', methods=['POST'])
 def activate_user():
     user = request.form.get('user').split(',')
     session['user_id'] = user[0]
     session['user_name'] = user[1]
+    login_user = mongo.db.users.find_one(
+        {"_id": ObjectId(session['user_id'])})
+    session['user_role'] = login_user['user_role']
     return redirect(url_for('get_tracks'))
 
-
+# logout and unset session vars
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
     session.pop('user_name', None)
+    session.pop('user_role', None)
     return redirect(url_for('get_tracks'))
 
-
+# start contest form
 @app.route('/start_contest')
 def start_contest():
     return render_template('startcontest.html')
 
-
+# process contest form
 @app.route('/insert_contest', methods=['POST'])
 def insert_contest():
     users = mongo.db.users
@@ -69,7 +74,7 @@ def insert_contest():
                      }})
     return redirect(url_for('get_tracks'))
 
-
+# track listing page
 @app.route('/get_tracks')
 def get_tracks():
     if mongo.db.tracks.count_documents({}) == 0:
@@ -82,7 +87,7 @@ def get_tracks():
                                styles=mongo.db.styles.find().sort('style'),
                                methods=mongo.db.methods.find().sort('method'))
 
-
+# process the sort and filter form for track listing page
 @app.route('/get_tracks_filtered', methods=['POST'])
 def get_tracks_filtered():
     if request.form.get('style'):
@@ -96,15 +101,24 @@ def get_tracks_filtered():
                            styles=mongo.db.styles.find().sort('style'),
                            methods=mongo.db.methods.find().sort('method'))
 
-
+# add track form
 @app.route('/add_track')
 def add_track():
-    return render_template('addtrack.html',
-                           users=mongo.db.users.find(),
-                           styles=mongo.db.styles.find().sort('style'),
-                           methods=mongo.db.methods.find().sort('method'))
+    """ check if a user is logged in and wether they are allowed to use this funtion """
+    if 'user_name' in session:
+        if session['user_role'] == 'contributor':
+            return render_template('addtrack.html',
+                                   styles=mongo.db.styles.find().sort('style'),
+                                   methods=mongo.db.methods.find().sort('method'))
+        else:
+            return render_template('permission.html',
+                                   message='As a voter you are not allowed to participate in the contest.')
+    else:
+        return render_template('login.html',
+                               message='Please login first to add a new track',
+                               users=mongo.db.users.find().sort('user_name'))
 
-
+# process add track form
 @app.route('/insert_track', methods=['POST'])
 def insert_track():
     tracks = mongo.db.tracks
@@ -123,17 +137,30 @@ def insert_track():
     tracks.insert_one(track)
     return redirect(url_for('get_tracks'))
 
-
+# view and edit a specific track
 @app.route('/view_track/<track_id>')
 def view_track(track_id):
-    return render_template('viewtrack.html',
-                           track=mongo.db.tracks.find_one(
-                               {"_id": ObjectId(track_id)}),
-                           users=mongo.db.users.find().sort('user_name'),
-                           styles=mongo.db.styles.find().sort('style'),
-                           methods=mongo.db.methods.find().sort('method'))
+    current_track = mongo.db.tracks.find_one(
+        {"_id": ObjectId(track_id)})
+    """ check if a user is logged in and wether they are allowed to use this funtion """
+    if 'user_name' in session:
+        if current_track['user_id'] == session['user_id']:
+            return render_template('viewtrack.html',
+                                   track=mongo.db.tracks.find_one(
+                                       {"_id": ObjectId(track_id)}),
+                                   users=mongo.db.users.find().sort('user_name'),
+                                   styles=mongo.db.styles.find().sort('style'),
+                                   methods=mongo.db.methods.find().sort('method'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowd to edit this track')
+    else:
+        return render_template('login.html',
+                               message='Please login first to add a new track',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
+# process edit track form
 @app.route('/update_track/<track_id>', methods=['POST'])
 def update_track(track_id):
     tracks = mongo.db.tracks
@@ -155,12 +182,12 @@ def update_track(track_id):
                     }})
     return redirect(url_for('get_tracks'))
 
-
+# register user form
 @app.route('/add_user')
 def add_user():
     return render_template('adduser.html')
 
-
+# process register user form
 @app.route('/insert_user', methods=['POST'])
 def insert_user():
     users = mongo.db.users
@@ -172,14 +199,14 @@ def insert_user():
     users.insert_one(user)
     return redirect(url_for('login'))
 
-
+# view and edit specific user
 @app.route('/view_user/<user_id>')
 def view_user(user_id):
     return render_template('viewuser.html',
                            user=mongo.db.users.find_one(
                                {"_id": ObjectId(user_id)}))
 
-
+# process edit user form
 @app.route('/update_user/<user_id>', methods=['POST'])
 def update_user(user_id):
     users = mongo.db.users
@@ -199,14 +226,31 @@ def update_user(user_id):
                    }})
     return redirect(url_for('get_tracks'))
 
-
+# vote for a track form
 @app.route('/vote_track/<track_id>')
 def vote_track(track_id):
-    voted_track = mongo.db.tracks.find_one({"_id": ObjectId(track_id)})
-    return render_template('votetrack.html',
-                           track=voted_track)
+    """ check if a user is logged in and wether they are allowed to use this funtion """
+    if 'user_name' in session:
+        if session['user_role'] == 'voter':
+            voted_track = mongo.db.tracks.find_one({"_id": ObjectId(track_id)})
+            track_votes = voted_track['votes']
+            """ check if this user already voted for this track """
+            for vote in track_votes:
+                if vote['user_id'] == session['user_id']:
+                    return render_template('permission.html',
+                                           message='You have already voted for this track.')
+                return render_template('votetrack.html',
+                                       track=voted_track)
+        else:
+            return render_template('permission.html',
+                                   message='As a contributor you are not allowed to vote in the contest.')
+    else:
+        return render_template('login.html',
+                               message='Please login first to vote for a track',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
+# process vote form
 @app.route('/insert_vote/<track_id>', methods=['POST'])
 def insert_vote(track_id):
     tracks = mongo.db.tracks
@@ -220,16 +264,26 @@ def insert_vote(track_id):
     """ add the vote to the total for this track """
     tracks.update_one({'_id': ObjectId(track_id)},
                       {'$inc': {'total_votes': int(request.form.get('vote'))}})
-
     return redirect(url_for('get_tracks'))
 
-
+# edit available creation methods form
 @app.route('/edit_methods')
 def edit_methods():
-    return render_template('editmethods.html',
-                           methods=mongo.db.methods.find().sort('method'))
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            return render_template('editmethods.html',
+                                   methods=mongo.db.methods.find().sort('method'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
+# process add method form
 @app.route('/insert_method', methods=['POST'])
 def insert_method():
     method = request.form.to_dict()
@@ -237,20 +291,42 @@ def insert_method():
     methods.insert_one(method)
     return redirect(url_for('edit_methods'))
 
-
+# delete a method
 @app.route('/delete_method/<method_id>')
 def delete_method(method_id):
-    methods = mongo.db.methods
-    methods.delete_one({'_id': ObjectId(method_id)})
-    return redirect(url_for('edit_methods'))
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            methods = mongo.db.methods
+            methods.delete_one({'_id': ObjectId(method_id)})
+            return redirect(url_for('edit_methods'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
+# edit available styles form
 @app.route('/edit_styles')
 def edit_styles():
-    return render_template('editstyles.html',
-                           styles=mongo.db.styles.find().sort('style'))
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            return render_template('editstyles.html',
+                                   styles=mongo.db.styles.find().sort('style'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
+# process add style form
 @app.route('/insert_style', methods=['POST'])
 def insert_style():
     style = request.form.to_dict()
@@ -258,14 +334,25 @@ def insert_style():
     styles.insert_one(style)
     return redirect(url_for('edit_styles'))
 
-
+# delete a style
 @app.route('/delete_style/<style_id>')
 def delete_style(style_id):
-    styles = mongo.db.styles
-    styles.delete_one({'_id': ObjectId(style_id)})
-    return redirect(url_for('edit_styles'))
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            styles = mongo.db.styles
+            styles.delete_one({'_id': ObjectId(style_id)})
+            return redirect(url_for('edit_styles'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
+# delete all tracks
 @app.route('/reset_contest')
 def reset_contest():
     tracks = mongo.db.tracks

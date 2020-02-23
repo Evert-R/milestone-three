@@ -123,8 +123,11 @@
             <li>
                 <div class="collapsible-header">
                     <i class="material-icons">keyboard_arrow_down</i>Votes
+                    {# only show vote button to contributors #}
+                    {% if session['user_role'] == 'voter' %}
                     <a href="{{url_for('vote_track', track_id=track._id)}}"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
+                    {% endif %}
                 </div>
                 <div class="collapsible-body">
                     <div class="row">

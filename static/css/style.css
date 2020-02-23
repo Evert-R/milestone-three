@@ -72,8 +72,9 @@ select {
     color: white;
 }
 
-.er-active a {
+.er-message {
     color: rgba(255, 0, 0);
+    font-weight: 900;
 }
 
 .er-light {
