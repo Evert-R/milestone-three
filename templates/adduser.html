@@ -70,6 +70,10 @@
                         <option value="" disabled selected>Will you contribute or vote?</option>
                         <option value="contributor">Contribute</option>
                         <option value="voter">Vote</option>
+                        {# if first user show admin option #}
+                        {% if not user %}
+                        <option value="administrator">Administrator</option>
+                        {% endif %}
                     </select>
                     <label>Role:</label>
                 </div>

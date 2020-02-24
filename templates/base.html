@@ -18,7 +18,7 @@
         <div class="navbar-fixed">
             <nav class="er-dark">
                 <div class="nav-wrapper">
-                    <a href="{{url_for('main')}}" class="brand-logo right er-logo">Crowd Finding</a>
+                    <a href="{{url_for('index')}}" class="brand-logo right er-logo">Crowd Finding</a>
                     <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
                     <ul id="nav-mobile" class="left hide-on-med-and-down">
                         <li><a href="{{url_for('get_tracks')}}">View all tracks</a></li>
@@ -44,7 +44,7 @@
                         {% endif %}
 
                         {# administrator only section #}
-                        {% if session['user_name'] == 'administrator' %}
+                        {% if session['user_role'] == 'administrator' %}
                         <!-- Dropdown Trigger -->
                         <li><a class="dropdown-trigger" href="#!" data-target="dropdown-administrator">Dropdown<i
                                     class="material-icons right">arrow_drop_down</i></a></li>
@@ -85,7 +85,7 @@
             {% endif %}
 
             {# administrator only section #}
-            {% if session['user_name'] == 'administrator' %}
+            {% if session['user_role'] == 'administrator' %}
             <li class="divider"></li>
             <li><a href="{{url_for('start_contest')}}">Start contest</a></li>
             <li><a href="{{url_for('edit_methods')}}">Edit methods</a></li>

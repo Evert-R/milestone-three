@@ -1,4 +1,5 @@
 import os
+import uuid
 from os import path
 from datetime import datetime
 from flask import Flask, render_template, redirect, request, url_for, session
@@ -13,7 +14,7 @@ if path.exists("env.py"):
 app = Flask(__name__)
 
 # set mongoDB database
-app.config["MONGO_DBNAME"] = 'track_competition'
+app.config["MONGO_DBNAME"] = 'crowd_finding'
 app.config["MONGO_URI"] = os.getenv('MONGO_URI', 'mongodb://localhost')
 
 # get secret key to enable sessions
@@ -24,12 +25,16 @@ mongo = PyMongo(app)
 
 # main page with contest info
 @app.route('/')
-def main():
-    current_contest = mongo.db.users.find_one(
-        {'user_name': 'administrator'})
+@app.route('/index')
+def index():
+    if mongo.db.contests.count_documents({}) == 0:
+        return render_template('permission.html',
+                               message='No contest is running at the moment')
+    current_contest = mongo.db.contests.find_one({'active': True})
     session['start_date'] = current_contest['start_date']
     session['end_date'] = current_contest['end_date']
     return render_template('main.html',
+                           contest=current_contest,
                            tracks=mongo.db.tracks.find().sort("total_votes", -1),
                            )
 
@@ -66,23 +71,27 @@ def start_contest():
 # process contest form
 @app.route('/insert_contest', methods=['POST'])
 def insert_contest():
-    users = mongo.db.users
-    users.update_one({'user_name': 'administrator'},
-                     {'$set': {
-                         'start_date': request.form.get('start_date'),
-                         'end_date': request.form.get('end_date')
-                     }})
-    return redirect(url_for('get_tracks'))
+    contests = mongo.db.contests
+    """ request to get the form, converted to dict """
+    contest = request.form.to_dict()
+    contest.update({'active': True})
+    contests.insert_one(contest)
+    return redirect(url_for('index'))
 
 # track listing page
 @app.route('/get_tracks')
 def get_tracks():
-    if mongo.db.tracks.count_documents({}) == 0:
+    if mongo.db.contests.count_documents({}) == 0:
+        return render_template('permission.html',
+                               message='No contest is running at the moment')
+    contest = mongo.db.contests.find_one({'active': True})
+    if mongo.db.tracks.count_documents({'contest': ObjectId(contest['_id'])}) == 0:
         return render_template('tracks.html',
                                no_tracks=True)
     else:
         return render_template('tracks.html',
-                               tracks=mongo.db.tracks.find().sort("total_votes", -1),
+                               tracks=mongo.db.tracks.find(
+                                   {'contest': ObjectId(contest['_id'])}).sort("total_votes", -1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
                                methods=mongo.db.methods.find().sort('method'))
@@ -90,10 +99,13 @@ def get_tracks():
 # process the sort and filter form for track listing page
 @app.route('/get_tracks_filtered', methods=['POST'])
 def get_tracks_filtered():
+    contest = mongo.db.contests.find_one({'active': True})
     if request.form.get('style'):
-        filter_by = {"style": request.form.get('style')}
+        filter_by = {'contest': ObjectId(
+            contest['_id']), 'style': request.form.get('style')}
     if request.form.get('creation_method'):
-        filter_by = {"creation_method": request.form.get('creation_method')}
+        filter_by = {'contest': ObjectId(
+            contest['_id']), 'creation_method': request.form.get('creation_method')}
     return render_template('tracks.html',
                            tracks=mongo.db.tracks.find(
                                filter_by).sort("total_votes", -1),
@@ -121,20 +133,30 @@ def add_track():
 # process add track form
 @app.route('/insert_track', methods=['POST'])
 def insert_track():
-    tracks = mongo.db.tracks
-    """ request to get the form, converted to dict """
-    track = request.form.to_dict()
+    contest = mongo.db.contests.find_one({'active': True})
     """ Get soundcloud embed code """
-    embed_code = track['soundcloud']
+    embed_code = request.form.get('soundcloud')
     """ strip the track number so we can use our own modified embed code """
     track_position = embed_code.find('track')
-    track['soundcloud'] = embed_code[track_position+7:track_position+16]
+    track_number = embed_code[track_position+7:track_position+16]
     """ get the current date and time, and add to the track """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-    track.update(
-        {'user': session['user_name'], 'user_id': session['user_id'], 'submitted': now})
     """ insert track in database and return to the track overview page """
-    tracks.insert_one(track)
+    mongo.db.tracks.insert_one({'contest': ObjectId(contest['_id']),
+                                'user': session['user_name'],
+                                'user_id': ObjectId(session['user_id']),
+                                'submitted': now,
+                                'soundcloud': track_number,
+                                'artist_name': request.form.get('artist_name'),
+                                'title': request.form.get('title'),
+                                'style': request.form.get('style'),
+                                'free_text': request.form.get('free_text'),
+                                'creation_method': request.form.get('creation_method'),
+                                'credits_who': request.form.get('credits_who'),
+                                'credits_what': request.form.get('credits_what'),
+                                'creation_date': request.form.get('creation_date'),
+                                'license': request.form.get('license'),
+                                'last_updated': now})
     return redirect(url_for('get_tracks'))
 
 # view and edit a specific track
@@ -185,18 +207,26 @@ def update_track(track_id):
 # register user form
 @app.route('/add_user')
 def add_user():
-    return render_template('adduser.html')
+    return render_template('adduser.html',
+                           users=mongo.db.users.find())
 
 # process register user form
 @app.route('/insert_user', methods=['POST'])
 def insert_user():
-    users = mongo.db.users
-    user = request.form.to_dict()
     """ get the current date and time, and add to the user record """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
-    user.update({'registered': now, 'last_updated': now})
     """ insert user in database and return to the track overview page """
-    users.insert_one(user)
+    mongo.db.users.insert_one({'user_name': request.form.get('user_name'),
+                               'user_email': request.form.get('user_email'),
+                               'user_role': request.form.get('user_role'),
+                               'profile_pic': request.form.get('profile_pic'),
+                               'user_city': request.form.get('user_city'),
+                               'user_country': request.form.get('user_country'),
+                               'user_website': request.form.get('user_website'),
+                               'mailing_list': request.form.get('mailing_list'),
+                               'registered': now,
+                               'last_updated': now
+                               })
     return redirect(url_for('login'))
 
 # view and edit specific user
@@ -363,4 +393,4 @@ def reset_contest():
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=False)
+            debug=True)
