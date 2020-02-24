@@ -95,26 +95,24 @@
 
                 <div class="collapsible-body">
                     <div class="row">
-                        <div class="col s9 er-inner-wrap">
-                            <h2>{{ track.artist_name }}:</h2>
-                            <p>{{track.free_text}}</p>
-                        </div>
-                        <div class="col s9 offset-s3 er-inner-wrap">
-                            <p>
+                        <div class="col s12 m8 er-inner-wrap">
+                            <h2>{{ track.artist_name }} - {{ track.title }}</h2>
+                            <p class="left-align">{{track.free_text}}</p>
+                            <p class="left-align">
                                 {{ track.title }} is a {{ track.style.lower() }} track made by
-                                {{ track.artist_name }}.
+                                {{ track.artist_name }}.<br>
                                 It was created in {{ track.creation_date }} and was made using
-                                {{ track.creation_method.lower() }}.
-                                Credits go to {{ track.credits_who }} for {{ track.credits_what }}.
+                                {{ track.creation_method.lower() }}.<br>
+                                Credits go to {{ track.credits_who }} for {{ track.credits_what }}.<br>
                             </p>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col s12 er-inner-wrap">
+                        <div class="col s12 m6 offset-m6 er-inner-wrap">
                             <p class="center-align">This track was submitted by <a
                                     href="{{url_for('view_user', user_id=track.user_id)}}" name="View user details">
-                                    {{ track.user }} </a> on {{ track.submitted }}</p>
-                            <p class="center-align">This work is licensed under {{ track.license }}.</p>
+                                    {{ track.user }} </a><br>{{ track.submitted }}</p>
+                            <div class="center-align er-license">
+                                <img src="static/images/{{ track.license }}" alt="licensed under {{ track.license }}">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,11 +153,24 @@
             </li>
         </ul>
         <div class="row">
-            <div class="col s6">
-                <p class="left-align">Total score: {{track.total_votes}}</p>
-            </div>
-            <div class="col s6">
-                <p class="right-align">Total score: {{track.total_votes}}</p>
+            <div class="col s12">
+                <div class="col s12 m4 l3">
+                    <p class="btn-floating btn-small green"><i class="material-icons">hearing</i></p>
+                    {{ track.style }}
+                </div>
+                <div class="col s12 m4 l3">
+                    <p class="btn-floating btn-small amber"><i class="material-icons">palette</i></p>
+                    {{ track.creation_method }}
+                </div>
+                <div class="col s6 m4 l2 offset-l2">
+                    <p class="btn-floating btn-small blue-grey darken-3">12</p><span> votes</span>
+
+                </div>
+                <div class="col s6 m12 l2">
+                    <p class="right-align">Total score: <span
+                            class="btn-floating btn-small waves-effect waves-light red pulse">
+                            {{track.total_votes}}</span></p>
+                </div>
             </div>
         </div>
     </div>

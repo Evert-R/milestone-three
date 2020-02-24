@@ -10,7 +10,6 @@ html {
 
 p {
     font-weight: 100;
-    text-align: justify;
 }
 
 p a, table a {
@@ -31,6 +30,9 @@ h1 {
 
 h2 {
     font-size: 1.2rem;
+    color: rgba(119, 58, 58);
+    font-weight: 900;
+    text-align: center;
 }
 
 select {
@@ -70,6 +72,11 @@ select {
 
 .er-dark li>a {
     color: white;
+}
+
+.er-license img {
+    height: 35px;
+    margin-bottom: 1rem;
 }
 
 .er-message {

@@ -156,7 +156,8 @@ def insert_track():
                                 'credits_what': request.form.get('credits_what'),
                                 'creation_date': request.form.get('creation_date'),
                                 'license': request.form.get('license'),
-                                'last_updated': now})
+                                'last_updated': now,
+                                'votes': {}})
     return redirect(url_for('get_tracks'))
 
 # view and edit a specific track
@@ -166,7 +167,7 @@ def view_track(track_id):
         {"_id": ObjectId(track_id)})
     """ check if a user is logged in and wether they are allowed to use this funtion """
     if 'user_name' in session:
-        if current_track['user_id'] == session['user_id']:
+        if current_track['user_id'] == ObjectId(session['user_id']):
             return render_template('viewtrack.html',
                                    track=mongo.db.tracks.find_one(
                                        {"_id": ObjectId(track_id)}),
@@ -222,7 +223,7 @@ def insert_user():
                                'profile_pic': request.form.get('profile_pic'),
                                'user_city': request.form.get('user_city'),
                                'user_country': request.form.get('user_country'),
-                               'user_website': request.form.get('user_website'),
+                               'user_website': request.form.get('website'),
                                'mailing_list': request.form.get('mailing_list'),
                                'registered': now,
                                'last_updated': now
@@ -250,7 +251,7 @@ def update_user(user_id):
                    'profile_pic': request.form.get('profile_pic'),
                    'user_city': request.form.get('user_city'),
                    'user_country': request.form.get('user_country'),
-                   'user_website': request.form.get('user_website'),
+                   'user_website': request.form.get('website'),
                    'mailing_list': request.form.get('mailing_list'),
                    'last_updated': now
                    }})
@@ -263,14 +264,8 @@ def vote_track(track_id):
     if 'user_name' in session:
         if session['user_role'] == 'voter':
             voted_track = mongo.db.tracks.find_one({"_id": ObjectId(track_id)})
-            track_votes = voted_track['votes']
-            """ check if this user already voted for this track """
-            for vote in track_votes:
-                if vote['user_id'] == session['user_id']:
-                    return render_template('permission.html',
-                                           message='You have already voted for this track.')
-                return render_template('votetrack.html',
-                                       track=voted_track)
+            return render_template('votetrack.html',
+                                   track=voted_track)
         else:
             return render_template('permission.html',
                                    message='As a contributor you are not allowed to vote in the contest.')
@@ -287,7 +282,7 @@ def insert_vote(track_id):
     tracks.update_one({'_id': ObjectId(track_id)},
                       {'$push': {'votes': {
                           'user': session['user_name'],
-                          'user_id': session['user_id'],
+                          'user_id': ObjectId(session['user_id']),
                           'vote': int(request.form.get('vote')),
                           'motivation': request.form.get('motivation')
                       }}})
@@ -393,4 +388,4 @@ def reset_contest():
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=True)
+            debug=False)
