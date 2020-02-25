@@ -13,102 +13,111 @@
 </head>
 
 <body>
-    <!-- Navigation-bar -->
     <header>
+        <!-- Navigation-bar -->
         <div class="navbar-fixed">
             <nav class="er-dark">
                 <div class="nav-wrapper">
-                    <a href="{{url_for('index')}}" class="brand-logo right er-logo">Crowd Finding</a>
-                    <a href="#" data-target="mobile-menu" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+                    <a href="{{url_for('index')}}" title="goto main page" class="brand-logo right er-logo">Crowd
+                        Finding</a>
+                    <a href="#" title="mobile menu" data-target="mobile-menu" class="sidenav-trigger"><i
+                            class="material-icons">menu</i></a>
                     <ul id="nav-mobile" class="left hide-on-med-and-down">
-                        <li><a href="{{url_for('get_tracks')}}">View all tracks</a></li>
+                        <li><a href="{{url_for('get_tracks')}}" title="goto track list">View all tracks</a></li>
 
                         {# only show add_track item to contributors #}
                         {% if session['user_role'] == 'contributor' %}
-                        <li><a href="{{url_for('add_track')}}">Add a track</a></li>
+                        <li><a href="{{url_for('add_track')}}" title="add a new track">Add a track</a></li>
                         {% endif %}
 
-                        <li><a href="{{url_for('add_user')}}">Register</a></li>
+                        <li><a href="{{url_for('add_user')}}" title="add a new user">Register</a></li>
 
                         {# check if a user is logged in #}
                         {% if not session['user_name'] %}
-                        <li><a href="{{url_for('login')}}">Log-in</a></li>
+                        <li><a href="{{url_for('login')}}" title="goto log-in page">Log-in</a></li>
                         {% endif %}
 
                         {# Check if a user is logged in #}
                         {% if session['user_name'] %}
-                        <li><a href="{{url_for('logout')}}" onclick="M.toast({html: 'Logging you out'})">Log-out</a>
+                        <li><a href="{{url_for('logout')}}" title="Log-out"
+                                onclick="M.toast({html: 'Logging you out'})">Log-out</a>
                         </li>
                         <li><a href="{{url_for('view_user', user_id=session['user_id'])}}"
-                                name="View user details">Logged in as {{ session['user_name'] }} </a></li>
+                                title="view logged in user page" name="View user details">Logged in as
+                                {{ session['user_name'] }} </a></li>
                         {% endif %}
 
                         {# administrator only section #}
                         {% if session['user_role'] == 'administrator' %}
                         <!-- Dropdown Trigger -->
-                        <li><a class="dropdown-trigger" href="#!" data-target="dropdown-administrator">Admin Options<i
+                        <li><a class="dropdown-trigger" href="#!" title="administrator menu"
+                                data-target="dropdown-administrator">Admin Options<i
                                     class="material-icons right">arrow_drop_down</i></a></li>
                         <!-- Dropdown Structure -->
                         <ul id="dropdown-administrator" class="dropdown-content er-darker">
-                            <li><a href="{{url_for('start_contest')}}">Start contest</a></li>
-                            <li><a href="{{url_for('edit_methods')}}">Edit methods</a></li>
-                            <li><a href="{{url_for('edit_styles')}}">Edit styles</a></li>
-                            <li><a href="{{url_for('view_users')}}">User list</a></li>
-                            <li><a href="{{url_for('reset_contest')}}">Delete all tracks</a></li>
+                            <li><a href="{{url_for('start_contest')}}" title="Start a new contest">Start contest</a>
+                            </li>
+                            <li><a href="{{url_for('edit_methods')}}"
+                                    title="edit available creation method for tracks">Edit methods</a></li>
+                            <li><a href="{{url_for('edit_styles')}}" title="edit available styles for tracks">Edit
+                                    styles</a></li>
+                            <li><a href="{{url_for('view_users')}}" title="goto user list">User list</a></li>
+                            <li><a href="{{url_for('reset_contest')}}" title="delete all tracks">Delete all tracks</a>
+                            </li>
                         </ul>
                         {% endif %}
                     </ul>
                 </div>
             </nav>
         </div>
+        <!-- Mobile menu -->
         <ul class="sidenav er-darker" id="mobile-menu">
 
             {# check if a user is logged in #}
             {% if session['user_name'] %}
-            <li><a href="{{url_for('view_user', user_id=session['user_id'])}}" name="View user details">Logged in as
+            <li><a href="{{url_for('view_user', user_id=session['user_id'])}}" title="View user details">Logged in as
                     {{ session['user_name'] }} </a></li>
-            <li><a href="{{url_for('logout')}}">Log-out</a></li>
+            <li><a href="{{url_for('logout')}}" title="log out">Log-out</a></li>
             <li class="divider"></li>
             {% endif %}
 
-            <li><a href="{{url_for('get_tracks')}}">View all tracks</a></li>
+            <li><a href="{{url_for('get_tracks')}}" title="goto track list">View all tracks</a></li>
 
             {# only show add_track item to contributors #}
             {% if session['user_role'] == 'contributor' %}
-            <li><a href="{{url_for('add_track')}}">Add a track</a></li>
+            <li><a href="{{url_for('add_track')}}" title="add a new track">Add a track</a></li>
             {% endif %}
 
-            <li><a href="{{url_for('add_user')}}">Register</a></li>
+            <li><a href="{{url_for('add_user')}}" title="add a new user">Register</a></li>
 
             {# check if a user is logged in #}
             {% if not session['user_name'] %}
-            <li><a href="{{url_for('login')}}">Log-in</a></li>
+            <li><a href="{{url_for('login')}}" title="goto login page">Log-in</a></li>
             {% endif %}
 
             {# administrator only section #}
             {% if session['user_role'] == 'administrator' %}
             <li class="divider"></li>
-            <li><a href="{{url_for('start_contest')}}">Start contest</a></li>
-            <li><a href="{{url_for('edit_methods')}}">Edit methods</a></li>
-            <li><a href="{{url_for('edit_styles')}}">Edit styles</a></li>
-            <li><a href="{{url_for('view_users')}}">User list</a></li>
-            <li><a href="{{url_for('reset_contest')}}">Delete all tracks</a></li>
+            <li><a href="{{url_for('start_contest')}}" title="start a new contest">Start contest</a></li>
+            <li><a href="{{url_for('edit_methods')}}" title="edit available creation methods for tracks">Edit
+                    methods</a></li>
+            <li><a href="{{url_for('edit_styles')}}" title="edit available styles for tracks">Edit styles</a></li>
+            <li><a href="{{url_for('view_users')}}" title="view user list">User list</a></li>
+            <li><a href="{{url_for('reset_contest')}}" title="Delete all tracks">Delete all tracks</a></li>
             {% endif %}
         </ul>
     </header>
-    <script></script>
+    <!-- Main section for template injection -->
     <div class="container">
-
         <article class="er-main-content">
-
             {% block content %} {% endblock %}
-
         </article>
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
             integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
             integrity="sha256-U/cHDMTIHCeMcvehBv1xQ052bPSbJtbuiw4QA9cTKz0=" crossorigin="anonymous"></script>
+        <!-- Activate all materialize functions -->
         <script>
             $(document).ready(function () {
                 $('.sidenav').sidenav();

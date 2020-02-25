@@ -37,19 +37,23 @@ The purpose of this application is to host a competition of musical tracks for s
 - [Steinberg Cubase 10](https://new.steinberg.net/cubase/) 
     - Converting music from Wav to Mp3 and FLAC
 
-## Deployment
-
-``` git clone https://github.com/Evert-R/milestone-three ```
-``` git remote rename origin destination ```
-``` git remote -v ```
-``` git remote add origin <url of the new repository>```
-``` git push origin master ```
-
-
-### Github Pages
+## Deployment instructions
+### Heroku
 This project was deployed on heroku from the ```master branch```
 
-#### This was done following this procedure:
+### First create a new github repository
+1. Clone the repository to a local folder 
+    ``` git clone https://github.com/Evert-R/milestone-three ```
+2. Rename the remote name     
+    ``` git remote rename origin destination ```
+3. Check if this was successfull
+    ``` git remote -v ```
+4. Assign a new remote
+    ``` git remote add origin <url of the new repository>```
+5. Push the local repository to the new remote
+    ``` git push origin master ```
+
+### Now create the heroku app:
 1. Goto the apps page on Heoku: [Heroku](https://dashboard.heroku.com/apps)
 2. Click ```New```
 3. Select ```Create new app```
@@ -62,17 +66,19 @@ This project was deployed on heroku from the ```master branch```
     1. IP           -   ```0.0.0.0```
     2. PORT         -   ```5000```
     3. MONGO_URI    -   ```<Your personal MongoDB URI>```
+    4. secret_key   -   ```<secret code to enable sessions in flask>```
 
-Deploy
-click Connect to GitHub
-click ok to authorize the connection
-use the search button to select the apropiate repository
+### Finally connect heroku to the github repository
+1. In heroku click ``` Connect to GitHub ```
+2. click ```Ok``` to authorize the connection
+3. use the search button to select the apropiate repository
 
-1. Enter from your local terminal : 
-    1. ```heroku login```
-            Provide your email and password to connect to heroku
-    2. ```heroku git:remote -a <your chosen app name>```
-    3. ```git push heroku master```
+### To connect the local folder to Heroku
+#### Enter from your local terminal : 
+1. ```heroku login```
+      Provide your email and password to connect to heroku
+2. ```heroku git:remote -a <your chosen app name>```
+3. ```git push heroku master```
 
 
-[Click here to view the deployed website](https://evert-r.github.io/milestone-one)
+[Click here to view the deployed website](https://crowd-finding.herokuapp.com/)

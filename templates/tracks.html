@@ -103,7 +103,7 @@
                     <i class="material-icons er-left">keyboard_arrow_down</i>{{track.artist_name}} - {{track.title}}
                     {# only show edit button to the submitter or the administrator #}
                     {% if track.user_id|replace(' ', '') == session['user_id']|replace(' ', '') or session['user_name'] == 'administrator' %}
-                    <a href="{{url_for('view_track', track_id=track._id)}}"
+                    <a href="{{url_for('view_track', track_id=track._id)}}" title="edit track details"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Edit</a>
                     {% endif %}
                 </div>
@@ -123,7 +123,7 @@
                         </div>
                         <div class="col s12 m6 offset-m6 er-inner-wrap">
                             <p class="center-align">This track was submitted by <a
-                                    href="{{url_for('view_user', user_id=track.user_id)}}" name="View user details">
+                                    href="{{url_for('view_user', user_id=track.user_id)}}" title="View user details">
                                     {{ track.user }} </a><br>{{ track.submitted }}</p>
                             <div class="center-align er-license">
                                 <img src="static/images/{{ track.license }}" alt="licensed under {{ track.license }}">
@@ -138,7 +138,7 @@
                     <i class="material-icons">keyboard_arrow_down</i>Votes
                     {# only show vote button to contributors #}
                     {% if session['user_role'] == 'voter' %}
-                    <a href="{{url_for('vote_track', track_id=track._id)}}"
+                    <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
                     {% endif %}
                 </div>
@@ -150,7 +150,7 @@
                                 <tr>
                                     <td>
                                         <a href="{{url_for('view_user', user_id=vote.user_id)}}"
-                                            name="View user details">
+                                            title="View user details">
                                             {{ vote.user }}:</a>
                                     </td>
                                     <td>
