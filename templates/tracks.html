@@ -29,7 +29,7 @@
                                 <span><i class="material-icons">keyboard_arrow_down</i></span>
                             </td>
                             <td class="center-align er-small">
-                                <span>Filter these results :</Filter></span>
+                                <span>Filter or sort results :</Filter></span>
                             </td>
                             <td class="right-align er-small">
                                 <span><i class="material-icons">keyboard_arrow_down</i></span>
@@ -40,7 +40,7 @@
 
                 <div class="row collapsible-body">
                     <form action="{{url_for('get_tracks_filtered')}}" method="POST">
-                        <div class="input-field col s12 m6">
+                        <div class="input-field col s12 m4">
                             <i class="material-icons prefix">hearing</i>
                             <select onchange="this.form.submit()" id="style" name="style">
                                 <option value="- - -" selected>- - -</option>
@@ -52,7 +52,7 @@
                         </div>
                     </form>
                     <form action="{{url_for('get_tracks_filtered')}}" method="POST">
-                        <div class="input-field col s12 m6">
+                        <div class="input-field col s12 m4">
                             <i class="material-icons prefix">palette</i>
                             <select onchange="this.form.submit()" id="creation_method" name="creation_method">
                                 <option value="- - -" selected>- - -</option>
@@ -61,6 +61,21 @@
                                 {% endfor %}
                             </select>
                             <label>Creation method:</label>
+                        </div>
+                    </form>
+                    <form action="{{url_for('get_tracks_sorted')}}" method="POST">
+                        <div class="input-field col s12 m4">
+                            <i class="material-icons prefix">unfold_more</i>
+                            <select onchange="this.form.submit()" id="sort_tracks" name="sort_tracks">
+                                <option value="- - -" selected>- - -</option>
+                                <option value="date_ascending">Date-Ascending</option>
+                                <option value="date_descending">Date-Descending</option>
+                                <option value="score_ascending">Score-Ascending</option>
+                                <option value="score_descending">Score-Descending</option>
+                                <option value="date_ascending">Date-Ascending</option>
+                                <option value="date_descending">Date-Descending</option>
+                            </select>
+                            <label>Sort tracks:</label>
                         </div>
                     </form>
                 </div>
