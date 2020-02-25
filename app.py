@@ -36,6 +36,7 @@ def index():
     return render_template('main.html',
                            contest=current_contest,
                            tracks=mongo.db.tracks.find().sort("total_votes", -1),
+                           total_tracks=mongo.db.tracks.count_documents({})
                            )
 
 # login page
@@ -195,7 +196,7 @@ def insert_track():
                                 'creation_date': request.form.get('creation_date'),
                                 'license': request.form.get('license'),
                                 'last_updated': now,
-                                'votes': {}})
+                                'total_votes': 0})
     return redirect(url_for('get_tracks'))
 
 # view and edit a specific track

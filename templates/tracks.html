@@ -178,8 +178,11 @@
                     {{ track.creation_method }}
                 </div>
                 <div class="col s6 m4 l2 offset-l2">
-                    <p class="btn-floating btn-small blue-grey darken-3">12</p><span> votes</span>
-
+                    {% for vote in track.votes %}
+                    {% if loop.index == loop.length %}
+                    <p class="btn-floating btn-small blue-grey darken-3">{{ loop.length }}</p><span> voted</span>
+                    {% endif %}
+                    {% endfor %}
                 </div>
                 <div class="col s6 m12 l2">
                     <p class="right-align">Total score: <span
