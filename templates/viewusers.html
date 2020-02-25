@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col s12 er-dark z-depth-5">
+        <h1 class="center-align">User list</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 er-light z-depth-5">
+        <table class="striped responsive-table">
+            <thead>
+                <th>Name:</th>
+                <th>E-mail:</th>
+                <th>City:</th>
+                <th>Country:</th>
+                <th>Website:</th>
+                <th>Registered:</th>
+                <th>Mailinglist:</th>
+            </thead>
+            {% for user in users %}
+            <tr>
+                <td>
+                    <a href="{{url_for('view_user', user_id=user._id)}}" title="View user details">
+                        {{ user.user_name }}</a>
+                </td>
+                <td>
+                    {{ user.user_email }}
+                </td>
+                <td>
+                    {{ user.user_city }}
+                </td>
+                <td>
+                    {{ user.user_country }}
+                </td>
+                <td>
+                    <a href="{{ user.website }}" target="blank" title="User website">
+                        <i class="material-icons">language</i></a>
+                </td>
+                <td>
+                    {{ user.registered }}
+                </td>
+                <td>
+                    {% if user.mailing_list == 'true' %}
+                    <i class="material-icons">check</i>
+                    {% else %}
+                    <i class="material-icons">clear</i>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

@@ -290,11 +290,27 @@ def update_user(user_id):
                    'profile_pic': request.form.get('profile_pic'),
                    'user_city': request.form.get('user_city'),
                    'user_country': request.form.get('user_country'),
-                   'user_website': request.form.get('website'),
+                   'website': request.form.get('website'),
                    'mailing_list': request.form.get('mailing_list'),
                    'last_updated': now
                    }})
     return redirect(url_for('get_tracks'))
+
+# See the users list
+@app.route('/view_users')
+def view_users():
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            return render_template('viewusers.html',
+                                   users=mongo.db.users.find().sort('user_name'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
 
 # vote for a track form
 @app.route('/vote_track/<track_id>')
