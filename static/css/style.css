@@ -6,15 +6,11 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
 html {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    font-size: 0.8em;
+    font-size: 0.9em;
     background-image: url("/static/images/krypto_23.jpg");
     background-repeat: repeat;
     background-size: cover;
     background-attachment: fixed;
-}
-
-p {
-    font-weight: 100;
 }
 
 p a, table a {
@@ -58,6 +54,7 @@ select {
 }
 
 .er-logo {
+    padding-right: 1rem!important;
     font-family: 'Krona One';
 }
 
@@ -95,14 +92,6 @@ select {
     background-color: rgba(0, 0, 0, 0.60);
     border-radius: 0.3rem;
     color: white;
-}
-
-.er-dark .input-field label {
-    color: white;
-}
-
-.select-wrapper input.select-dropdown {
-    font-size: 1rem;
 }
 
 .er-white {
@@ -152,8 +141,8 @@ select {
 
 .er-track-icons {
     font-family: 'Orbitron';
-    font-size: 0.8rem;
-    letter-spacing: .3rem;
+    font-size: 0.75rem;
+    letter-spacing: .05rem;
     font-weight: 600;
 }
 
@@ -166,7 +155,7 @@ select {
     padding-top: 0.6rem;
     color: white;
     overflow: hidden;
-    z-index: 1000;
+    z-index: 1;
     position: relative;
     transform: rotate(-10deg);
     top: 3rem;
@@ -201,7 +190,7 @@ select {
 }
 
 .input-field {
-    margin-top: 0rem;
+    margin-top: 0.8rem;
     margin-bottom: 0rem;
 }
 
@@ -209,12 +198,38 @@ select {
     color: rgba(0, 0, 0, 0.90);
 }
 
-.input-field .prefix {
-    font-size: 1.5rem;
+label {
+    color: rgba(0, 0, 0, 0.90);
 }
 
-.input-field input[type=text]::placeholder, textarea::placeholder {
-    color: rgba(0, 0, 0, 0.3);
+.input-field .prefix {
+    font-size: 1.4rem;
+}
+
+.select-wrapper input.select-dropdown {
+    color: rgba(0, 0, 0, 0.90);
+    font-size: 1rem;
+}
+
+.input-field input::placeholder, textarea::placeholder {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+[type="radio"]:not(:checked)+span, [type="radio"]:checked+span {
+    font-size: 0.8rem;
+}
+
+[type="checkbox"]+span:not(.lever) {
+    font-size: 0.8rem;
+}
+
+.material-icons {
+    font-size: 1.3rem;
+}
+
+a.tooltipped {
+    color: rgba(0, 0, 0, 0.90);
 }
 
 /* ----------------------------------------Responsive breakpoints */

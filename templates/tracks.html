@@ -172,7 +172,7 @@
                                             {{ vote.user }}:</a>
                                     </td>
                                     <td>
-                                        {{ vote.vote }} points
+                                        {{ vote.vote }}
                                     </td>
                                     <td class="right-align">
                                         {{ vote.motivation }}
@@ -206,17 +206,17 @@
         </ul>
         <div class="row">
             <div class="col s12">
-                <div class="col s12 m4">
+                <div class="col s12 l4">
                     <p class="btn-floating btn-small green"><i class="material-icons">hearing</i></p>
                     <span class="er-track-icons"> {{ track.style }}</span>
                 </div>
-                <div class="col s12 m4">
+                <div class="col s12 l4">
                     <p class="btn-floating btn-small amber"><i class="material-icons">palette</i></p>
                     <span class="er-track-icons"> {{ track.creation_method }}</span>
 
                 </div>
 
-                <div class="col s12 m4">
+                <div class="col s12 l4">
                     <p class="right-align"><span class="er-track-icons">Total score:</span>
                         <span class="btn-floating btn-small waves-effect waves-light red pulse">
                             {{track.total_votes}}</span></p>

@@ -50,13 +50,20 @@ def login():
 # process login form and set session vars
 @app.route('/activate_user', methods=['POST'])
 def activate_user():
-    user = request.form.get('user').split(',')
-    session['user_id'] = user[0]
-    session['user_name'] = user[1]
-    login_user = mongo.db.users.find_one(
-        {"_id": ObjectId(session['user_id'])})
-    session['user_role'] = login_user['user_role']
-    return redirect(url_for('get_tracks'))
+    if mongo.db.users.count_documents({'user_name': request.form.get('user_name')}) == 0:
+        return render_template('login.html',
+                               message='Your user name is unknown',
+                               users=mongo.db.users.find().sort('user_name'))
+    current_user = mongo.db.users.find_one(
+        {'user_name': request.form.get('user_name')})
+    if request.form.get('password') == current_user['password']:
+        session['user_id'] = str(current_user['_id'])
+        session['user_name'] = current_user['user_name']
+        session['user_role'] = current_user['user_role']
+        return redirect(url_for('get_tracks'))
+    return render_template('login.html',
+                           message='Your password is incorrect',
+                           users=mongo.db.users.find().sort('user_name'))
 
 
 # logout and unset session vars
@@ -287,6 +294,7 @@ def insert_user():
     """ insert user in database and return to the log-in page """
     mongo.db.users.insert_one({'user_name': request.form.get('user_name'),
                                'user_email': request.form.get('user_email'),
+                               'password': request.form.get('password'),
                                'user_role': request.form.get('user_role'),
                                'profile_pic': request.form.get('profile_pic'),
                                'user_city': request.form.get('user_city'),

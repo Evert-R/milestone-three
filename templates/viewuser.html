@@ -15,9 +15,16 @@
         <p class="center-align">from {{ user.user_city }}, {{ user.user_country }}</p>
         <p class="center-align">Member since {{ member_since[0] }}</p>
     </div>
+    {% if user.profile_pic %}
     <div class="col s12 m3 offset-m1">
         <img src="{{ user.profile_pic }}" alt="" class="circle responsive-img">
     </div>
+    {# if no profile picture is present show default #}
+    {% else %}
+    <div class="col s12 m3 offset-m1">
+        <img src="{{url_for('static', filename='images/default-user.png')}}" alt="" class="circle responsive-img">
+    </div>
+    {% endif %}
 </div>
 
 {# only show edit form to the specified user or the administrator #}
@@ -74,18 +81,6 @@
                     <label for="website">Website:</label>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="input-field col s12 m6">
-                    <i class="material-icons prefix">mouse</i>
-                    <select value="{{user.user_role}}" id="user_role" name="user_role" class="validate">
-                        <option value="contributor">Contribute</option>
-                        <option value="voter">Vote</option>
-                    </select>
-                    <label>Role:</label>
-                </div>
-            </div>
-
             <div class="row">
                 <div class="col s12 m6">
                     <label for="mailing_list">
@@ -96,7 +91,7 @@
             </div>
 
             <div class="row">
-                <button class="btn waves-effect waves-light  blue-grey darken-3" type="submit">Register
+                <button class="btn waves-effect waves-light  blue-grey darken-3" type="submit">Update info
                     <i class="material-icons right">playlist_add</i>
                 </button>
             </div>

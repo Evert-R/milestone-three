@@ -72,7 +72,9 @@
         </div>
         <!-- Mobile menu -->
         <ul class="sidenav er-darker" id="mobile-menu">
-
+            <li><a href="{{url_for('index')}}" title="goto main page" class="er-logo">Crowd
+                    Finding</a></li>
+            <li class="divider"></li>
             {# check if a user is logged in #}
             {% if session['user_name'] %}
             <li><a href="{{url_for('view_user', user_id=session['user_id'])}}" title="View user details">Logged in as

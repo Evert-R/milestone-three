@@ -15,27 +15,29 @@
         <br>
         {% endif %}
         <form action="{{ url_for('activate_user') }}" method="POST" class="col s12">
-            <div class="row">
-                <div class="input-field col s12">
-                    <i class="material-icons prefix">account_circle</i>
-                    <select id="user" name="user" required="" aria-required="true">
-                        <option value="" disabled selected>What's your username ?</option>
-                        {% for user in users %}
-                        <option value="{{user._id}},{{user.user_name}}">{{user.user_name}}</option>
-                        {% endfor %}
-                    </select>
-                    <label>Username:</label>
-                </div>
+            <div class="input-field col s12 m5">
+                <i class="material-icons prefix">face</i>
+                <input placeholder="What's your username?" id="user_name" name="user_name" type="text" class="validate"
+                    required="" aria-required="true">
+                <label for="user_name">Username:</label>
             </div>
-            <div class="row">
+            <div class="input-field col s12 m5">
+                <i class="material-icons prefix">fingerprint</i>
+                <input placeholder="What's your password?" id="password" name="password" type="password"
+                    class="validate" required="" aria-required="true">
+                <label for="user_name">Password:</label>
+            </div>
+            <div class="col s12 m2">
                 <button onclick="M.toast({html: 'Logging you in'})"
-                    class="btn waves-effect waves-light blue-grey darken-3" type="submit">Login
+                    class="btn waves-effect waves-light blue-grey darken-3 right" type="submit">Login
                     <i class="material-icons right">fingerprint</i>
                 </button>
             </div>
         </form>
-        <p class="center-align"><a href="{{url_for('add_user')}}" title="Goto register page">If
-                you haven't already, please register <span class="er-message">here.</span></a></p>
+        <div class="col s12">
+            <p class="center-align"><a href="{{url_for('add_user')}}" title="Goto register page">If
+                    you haven't already, please register <span class="er-message">here.</span></a></p>
+        </div>
     </div>
 </div>
 
