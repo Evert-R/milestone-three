@@ -96,21 +96,46 @@
 
                 <div class="collapsible-body">
                     <div class="row">
-                        <div class="col s12 m8 er-inner-wrap">
-                            <h3>{{ track.artist_name }} - {{ track.title }}</h3>
-                            <p class="left-align">{{track.free_text}}</p>
-                            <p class="left-align">
-                                {{ track.title }} is a {{ track.style.lower() }} track made by
-                                {{ track.artist_name }}.<br>
-                                It was created in {{ track.creation_date }} and was made using
-                                {{ track.creation_method.lower() }}.<br>
-                                Credits go to {{ track.credits_who }} for {{ track.credits_what }}.<br>
-                            </p>
-                        </div>
-                        <div class="col s12 m6 offset-m6 er-inner-wrap">
-                            <p class="center-align">This track was submitted by <a
-                                    href="{{url_for('view_user', user_id=track.user_id)}}" title="View user details">
-                                    {{ track.user }} </a><br>{{ track.submitted }}</p>
+                        <div class="col s12 m10 offset-m1 er-inner-wrap">
+                            <h2>{{ track.artist_name }} - {{ track.title }}</h2>
+                            <div class="er-info">
+                                <p class="center-align">{{track.free_text}}</p>
+                            </div>
+                            <table>
+                                <tr>
+                                    <td>Submitted by:</td>
+                                    <td><a href="{{url_for('view_user', user_id=track.user_id)}}"
+                                            title="View user details">
+                                            {{ track.user }} </a></td>
+                                </tr>
+                                <tr>
+                                    <td>Artist:</td>
+                                    <td>{{ track.artist_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Track title:</td>
+                                    <td>{{ track.title }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Style:</td>
+                                    <td>{{ track.style }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Method:</td>
+                                    <td>{{ track.creation_method }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Created:</td>
+                                    <td>{{ track.creation_date }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Submitted:</td>
+                                    <td>{{ track.submitted }}</td>
+                                </tr>
+                            </table>
+                            <br>
+                            <p class="center-align">Credits go to {{ track.credits_who }} for
+                                {{ track.credits_what }}</p>
                             <div class="center-align er-license">
                                 <img src="static/images/{{ track.license }}" alt="licensed under {{ track.license }}">
                             </div>
@@ -122,7 +147,7 @@
             <li>
                 <div class="collapsible-header">
                     <i class="material-icons">keyboard_arrow_down</i>Votes
-                    {# only show vote button to contributors #}
+                    {# only show vote button to voters #}
                     {% if session['user_role'] == 'voter' %}
                     <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
@@ -134,8 +159,7 @@
                             <div class="">
                                 {% for vote in track.votes %}
                                 {% if loop.index == loop.length %}
-                                <p class="btn-floating btn-small blue-grey darken-3">{{ loop.length }}</p><span>
-                                    voted</span>
+                                <h3 class="">{{ loop.length }} users have already voted for this track</h3>
                                 {% endif %}
                                 {% endfor %}
                             </div>
@@ -155,7 +179,26 @@
                                     </td>
                                 </tr>
                                 {% endfor %}
+                                <tr>
+
+                                    <td><br><br>
+                                        Total score:
+                                    </td>
+                                    <td><br><br>
+                                        {{ track.total_votes }} points
+                                    </td>
+                                    <td></td>
+                                </tr>
                             </table>
+
+                        </div>
+                        <div class="center-align"><br>
+                            {# only show vote button to voters #}
+                            {% if session['user_role'] == 'voter' %}
+                            <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
+                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote for this
+                                track now</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
