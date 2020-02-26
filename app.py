@@ -114,7 +114,7 @@ def get_tracks():
                                methods=mongo.db.methods.find().sort('method'))
 
 
-# process the sort and filter form for track listing page
+# process the filter form for track listing page
 @app.route('/get_tracks_filtered', methods=['POST'])
 def get_tracks_filtered():
     if request.form.get('style'):
@@ -123,14 +123,16 @@ def get_tracks_filtered():
                                    {"style": request.form.get('style')}).sort("total_votes", -1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
-                               methods=mongo.db.methods.find().sort('method'))
+                               methods=mongo.db.methods.find().sort('method'),
+                               ranking='false')
     if request.form.get('creation_method'):
         return render_template('tracks.html',
                                tracks=mongo.db.tracks.find(
                                    {"creation_method": request.form.get('creation_method')}).sort("total_votes", -1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
-                               methods=mongo.db.methods.find().sort('method'))
+                               methods=mongo.db.methods.find().sort('method'),
+                               ranking='false')
     return render_template('tracks.html',
                            tracks=mongo.db.tracks.find().sort("total_votes", -1),
                            users=mongo.db.users.find().sort('user_name'),
@@ -138,7 +140,7 @@ def get_tracks_filtered():
                            methods=mongo.db.methods.find().sort('method'))
 
 
-# process the sort and filter form for track listing page
+# process the sort form for track listing page
 @app.route('/get_tracks_sorted', methods=['POST'])
 def get_tracks_sorted():
     if request.form.get('sort_tracks') == 'date_ascending':
@@ -146,19 +148,22 @@ def get_tracks_sorted():
                                tracks=mongo.db.tracks.find().sort("_id", +1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
-                               methods=mongo.db.methods.find().sort('method'))
+                               methods=mongo.db.methods.find().sort('method'),
+                               ranking='false')
     if request.form.get('sort_tracks') == 'date_descending':
         return render_template('tracks.html',
                                tracks=mongo.db.tracks.find().sort("_id", -1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
-                               methods=mongo.db.methods.find().sort('method'))
+                               methods=mongo.db.methods.find().sort('method'),
+                               ranking='false')
     if request.form.get('sort_tracks') == 'score_ascending':
         return render_template('tracks.html',
                                tracks=mongo.db.tracks.find().sort("total_votes", +1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
-                               methods=mongo.db.methods.find().sort('method'))
+                               methods=mongo.db.methods.find().sort('method'),
+                               ranking='false')
     if request.form.get('sort_tracks') == 'score_descending':
         return render_template('tracks.html',
                                tracks=mongo.db.tracks.find().sort("total_votes", -1),

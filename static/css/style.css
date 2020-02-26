@@ -3,6 +3,7 @@
 /* Classes and id's that start with 'er-' are my own */
 
 @import url('https://fonts.googleapis.com/css?family=Krona+One&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
 html {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.8em;
@@ -26,15 +27,20 @@ a, a:visited, a:active {
 }
 
 h1 {
+    font-family: 'Orbitron';
     font-size: 2rem;
-    padding-bottom: 1.5rem;
+    letter-spacing: 0.4rem!important;
+    margin: 01rem;
     color: rgba(255, 0, 0);
     letter-spacing: 0.3rem;
+    text-shadow: 2px 2px 2px rgb(225, 223, 223, 0.2);
 }
 
 h2 {
+    font-family: 'Orbitron';
     font-size: 1.2rem;
-    color: rgba(119, 58, 58);
+    letter-spacing: 0.4rem!important;
+    color: rgba(0, 0, 0);
     font-weight: 900;
     text-align: center;
 }
@@ -66,6 +72,18 @@ select {
 .er-dark {
     background-color: rgba(0, 0, 0, 0.60);
     border-radius: 0.3rem;
+    color: white;
+}
+
+.er-dark .input-field label {
+    color: white;
+}
+
+.select-wrapper input.select-dropdown {
+    font-size: 1rem;
+}
+
+.er-white {
     color: white;
 }
 
@@ -110,6 +128,35 @@ select {
     margin-right: auto;
 }
 
+.er-track-icons {
+    font-family: 'Orbitron';
+    font-size: 0.8rem;
+    letter-spacing: .3rem;
+    font-weight: 600;
+}
+
+.er-float {
+    font-family: 'Orbitron';
+    font-size: 0.7rem;
+    letter-spacing: 0.1rem;
+    width: 6rem;
+    height: 6rem;
+    padding-top: 0.6rem;
+    color: white;
+    overflow: hidden;
+    z-index: 1000;
+    position: relative;
+    transform: rotate(-10deg);
+    top: 3rem;
+    left: -2rem;
+    background-color: rgba(55, 55, 55, 0.9);
+    border-radius: 3rem;
+}
+
+.er-float span {
+    font-size: 1.5rem;
+}
+
 /* Materialize classes */
 
 .sidenav li>a {
@@ -130,6 +177,11 @@ select {
     background-color: rgba(0, 0, 0, 0.60)!important;
 }
 
+.input-field {
+    margin-top: 0rem;
+    margin-bottom: 0rem;
+}
+
 .input-field label {
     color: rgba(0, 0, 0, 0.90);
 }
@@ -140,4 +192,15 @@ select {
 
 .input-field input[type=text]::placeholder, textarea::placeholder {
     color: rgba(0, 0, 0, 0.3);
+}
+
+/* ----------------------------------------Responsive breakpoints */
+
+/* --------------------------768 - MD */
+
+@media(min-width: 768px) {
+    .input-field {
+        margin-top: 0rem;
+        margin-bottom: 0rem;
+    }
 }

@@ -1,11 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="row">
-    <div class="col s12 er-dark z-depth-3">
 
-        <h1 class="center-align">Tracks in this contest</h1>
-
-    </div>
 </div>
 
 {% if no_tracks %}
@@ -19,78 +15,68 @@
 {% else %}
 
 <div class="row">
-    <div class="col s12 er-light z-depth-5">
-        <ul class="collapsible">
-            <li>
-                <div class="collapsible-header er-small">
-                    <table>
-                        <tr>
-                            <td class="er-small">
-                                <span><i class="material-icons">keyboard_arrow_down</i></span>
-                            </td>
-                            <td class="center-align er-small">
-                                <span>Filter or sort results :</Filter></span>
-                            </td>
-                            <td class="right-align er-small">
-                                <span><i class="material-icons">keyboard_arrow_down</i></span>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="row collapsible-body">
-                    <form action="{{url_for('get_tracks_filtered')}}" method="POST">
-                        <div class="input-field col s12 m4">
-                            <i class="material-icons prefix">hearing</i>
-                            <select onchange="this.form.submit()" id="style" name="style">
-                                <option value="- - -" selected>- - -</option>
-                                {% for style in styles %}
-                                <option value="{{style.style}}">{{style.style}}</option>
-                                {% endfor %}
-                            </select>
-                            <label>Style:</label>
-                        </div>
-                    </form>
-                    <form action="{{url_for('get_tracks_filtered')}}" method="POST">
-                        <div class="input-field col s12 m4">
-                            <i class="material-icons prefix">palette</i>
-                            <select onchange="this.form.submit()" id="creation_method" name="creation_method">
-                                <option value="- - -" selected>- - -</option>
-                                {% for method in methods %}
-                                <option value="{{method.method}}">{{method.method}}</option>
-                                {% endfor %}
-                            </select>
-                            <label>Creation method:</label>
-                        </div>
-                    </form>
-                    <form action="{{url_for('get_tracks_sorted')}}" method="POST">
-                        <div class="input-field col s12 m4">
-                            <i class="material-icons prefix">unfold_more</i>
-                            <select onchange="this.form.submit()" id="sort_tracks" name="sort_tracks">
-                                <option value="- - -" selected>- - -</option>
-                                <option value="date_ascending">Date-Ascending</option>
-                                <option value="date_descending">Date-Descending</option>
-                                <option value="score_ascending">Score-Ascending</option>
-                                <option value="score_descending">Score-Descending</option>
-                                <option value="date_ascending">Date-Ascending</option>
-                                <option value="date_descending">Date-Descending</option>
-                            </select>
-                            <label>Sort tracks:</label>
-                        </div>
-                    </form>
-                </div>
-            </li>
-        </ul>
-
-
+    <div class="col s12 er-dark z-depth-3">
+        <h1 class="center-align">Tracks in this contest</h1>
     </div>
 </div>
+
+<div class="row">
+    <div class="col s12 er-light z-depth-5">
+        <form action="{{url_for('get_tracks_filtered')}}" method="POST">
+            <div class="input-field col s12 m4">
+                <i class="material-icons prefix">hearing</i>
+                <select onchange="this.form.submit()" id="style" name="style">
+                    <option value="- - -" disabled selected>Filter by style</option>
+                    {% for style in styles %}
+                    <option value="{{style.style}}">{{style.style}}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+        </form>
+        <form action="{{url_for('get_tracks_filtered')}}" method="POST">
+            <div class="input-field col s12 m4">
+                <i class="material-icons prefix">palette</i>
+                <select onchange="this.form.submit()" id="creation_method" name="creation_method">
+                    <option value="- - -" disabled selected>Filter by method</option>
+                    {% for method in methods %}
+                    <option value="{{method.method}}">{{method.method}}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+        </form>
+        <form action="{{url_for('get_tracks_sorted')}}" method="POST">
+            <div class="input-field col s12 m4">
+                <i class="material-icons prefix">unfold_more</i>
+                <select onchange="this.form.submit()" id="sort_tracks" name="sort_tracks">
+                    <option class="er-white" value="- - -" disabled selected>Sort results</option>
+                    <option value="date_ascending">Date-Ascending</option>
+                    <option value="date_descending">Date-Descending</option>
+                    <option value="score_ascending">Score-Ascending</option>
+                    <option value="score_descending">Score-Descending</option>
+                </select>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 
 {% for track in tracks %}
 
 <div class="row">
+    {# Only show ranking on whole list #}
+    {% if ranking != 'false' %}
+    <div class="er-float z-depth-3">
+        <p class="center-align">Rank #<br><span>{{ loop.index }}</span>
+        </p>
+    </div>
+    {% endif %}
     <div class="col s12 er-light">
+        <div class="er-track-title">
+            <h2>{{ track.artist_name }} - {{ track.title }}</h2>
+        </div>
         <ul class="collapsible">
             <li>
                 <div>
@@ -100,7 +86,7 @@
             </li>
             <li>
                 <div class="collapsible-header">
-                    <i class="material-icons er-left">keyboard_arrow_down</i>{{track.artist_name}} - {{track.title}}
+                    <i class="material-icons er-left">keyboard_arrow_down</i>Description
                     {# only show edit button to the submitter or the administrator #}
                     {% if track.user_id|replace(' ', '') == session['user_id']|replace(' ', '') or session['user_name'] == 'administrator' %}
                     <a href="{{url_for('view_track', track_id=track._id)}}" title="edit track details"
@@ -111,7 +97,7 @@
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="col s12 m8 er-inner-wrap">
-                            <h2>{{ track.artist_name }} - {{ track.title }}</h2>
+                            <h3>{{ track.artist_name }} - {{ track.title }}</h3>
                             <p class="left-align">{{track.free_text}}</p>
                             <p class="left-align">
                                 {{ track.title }} is a {{ track.style.lower() }} track made by
@@ -145,6 +131,14 @@
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="col s12 er-inner-wrap">
+                            <div class="">
+                                {% for vote in track.votes %}
+                                {% if loop.index == loop.length %}
+                                <p class="btn-floating btn-small blue-grey darken-3">{{ loop.length }}</p><span>
+                                    voted</span>
+                                {% endif %}
+                                {% endfor %}
+                            </div>
                             <table>
                                 {% for vote in track.votes %}
                                 <tr>
@@ -169,24 +163,19 @@
         </ul>
         <div class="row">
             <div class="col s12">
-                <div class="col s12 m4 l3">
+                <div class="col s12 m4">
                     <p class="btn-floating btn-small green"><i class="material-icons">hearing</i></p>
-                    {{ track.style }}
+                    <span class="er-track-icons"> {{ track.style }}</span>
                 </div>
-                <div class="col s12 m4 l3">
+                <div class="col s12 m4">
                     <p class="btn-floating btn-small amber"><i class="material-icons">palette</i></p>
-                    {{ track.creation_method }}
+                    <span class="er-track-icons"> {{ track.creation_method }}</span>
+
                 </div>
-                <div class="col s6 m4 l2 offset-l2">
-                    {% for vote in track.votes %}
-                    {% if loop.index == loop.length %}
-                    <p class="btn-floating btn-small blue-grey darken-3">{{ loop.length }}</p><span> voted</span>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-                <div class="col s6 m12 l2">
-                    <p class="right-align">Total score: <span
-                            class="btn-floating btn-small waves-effect waves-light red pulse">
+
+                <div class="col s12 m4">
+                    <p class="right-align"><span class="er-track-icons">Total score:</span>
+                        <span class="btn-floating btn-small waves-effect waves-light red pulse">
                             {{track.total_votes}}</span></p>
                 </div>
             </div>
