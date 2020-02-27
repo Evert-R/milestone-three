@@ -11,202 +11,204 @@
         <div class="row">
             <div class="col s12">
                 <h2>Welcome to Crowd Finding</h2>
-                <p class="center-align">A music contest for starting musicians.</p>
+                <p class="center-align">A music contest for starting musicians</p>
             </div>
         </div>
         <div class="row">
             <div class="col s12 m7 offset-m1 er-inner-wrap">
                 <p class="flow-text">Everyone with a soundcloud can join in. You don't even have to upload your track
                     again, but you can simply use the embed-code wich is provided with each soundcloud track. Just
-                    register on this page as an artist and of you go !<br> When
+                    <a href="{{url_for('add_user')}}" title="add a new user">register on this page</a> as an artist and
+                    of you go !<br> When
                     the contest is over the 5 tracks with the highest ranking will be published as an album on
                     spotify and Itunes.</p>
             </div>
             <div class="col s12 m3">
                 <div class="er-image">
                     <a href="https://www.soundcloud.com" target="blank" title="Goto soundcloud page">
-                        <img src="{{url_for('static', filename='images/soundcloud.png')}}" alt="soundcloud logo"
+                        <img src="https://evertrot.nl/codeinstitute/milestonethree/soundcloud.png" alt="soundcloud logo"
                             class="circle responsive-img"></a>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col s12 m7 offset-m4 er-inner-wrap">
-                <p class="flow-text">Not an artist? We encourage to you to register as a voter so you can decide for
+                <p class="flow-text">Not an artist? We encourage to you to <a href="{{url_for('add_user')}}"
+                        title="add a new user">register as a voter</a> so you can decide for
                     yourself wich track you will find on spotify and itunes in the near future.</p>
             </div>
         </div>
         <div class="row">
             <div class="col s12 m10 offset-m1 er-inner-wrap er-info">
                 <p class="center-align">This contest started on {{ session['start_date'] }} and will end on
-                    {{ session['end_date'] }}.<br>
-                    At the moment there are a total of {{ total_tracks }} tracks already in this contest.</p>
+                    {{ session['end_date'] }}<br>
+                    At the moment there are a total of {{ total_tracks }} tracks already in this contest</p>
             </div>
         </div>
-    </div>
-</div>
-
-{% for track in tracks %}
-<div class="row">
-    <div class="er-float z-depth-3">
-        <p class="center-align">Rank #<br><span>1</span>
-        </p>
-    </div>
-
-    <div class="col s12 er-light">
-        <div class="er-track-title">
-            <p class="center-align">This is our current Number 1 :</p>
-            <h2>{{ track.artist_name }} - {{ track.title }}</h2>
-        </div>
-        <ul class="collapsible">
-            <li>
-                <div>
-                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
-                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
+        {% for track in tracks %}
+        <div class="row">
+            <div class="col s12">
+                <div class="er-track-title er-light">
+                    <h3 class="center-align">This is our current Number 1 :</h3>
+                    <h1 class="center-align">{{ track.artist_name }} - {{ track.title }}</h1>
+                    <p class="center-align"><a href="{{url_for('get_tracks')}}" title="goto track list">Click here to
+                            see all entries</a></p>
                 </div>
-            </li>
-            <li>
-                <div class="collapsible-header">
-                    <i class="material-icons er-left">keyboard_arrow_down</i>Description
-                    {# only show edit button to the submitter or the administrator #}
-                    {% if track.user_id|replace(' ', '') == session['user_id']|replace(' ', '') or session['user_name'] == 'administrator' %}
-                    <a href="{{url_for('view_track', track_id=track._id)}}" title="edit track details"
-                        class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Edit</a>
-                    {% endif %}
-                </div>
+                <ul class="collapsible">
+                    <li>
+                        <div>
+                            <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+                                src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons er-left">keyboard_arrow_down</i>Description
+                            {# only show edit button to the submitter or the administrator #}
+                            {% if track.user_id|replace(' ', '') == session['user_id']|replace(' ', '') or session['user_name'] == 'administrator' %}
+                            <a href="{{url_for('view_track', track_id=track._id)}}" title="edit track details"
+                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Edit</a>
+                            {% endif %}
+                        </div>
 
-                <div class="collapsible-body">
-                    <div class="row">
-                        <div class="col s12 m10 offset-m1 er-inner-wrap">
-                            <h2>{{ track.artist_name }} - {{ track.title }}</h2>
-                            <div class="er-info">
-                                <p class="center-align">{{track.free_text}}</p>
-                            </div>
-                            <table>
-                                <tr>
-                                    <td>Submitted by:</td>
-                                    <td><a href="{{url_for('view_user', user_id=track.user_id)}}"
-                                            title="View user details">
-                                            {{ track.user }} </a></td>
-                                </tr>
-                                <tr>
-                                    <td>Artist:</td>
-                                    <td>{{ track.artist_name }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Track title:</td>
-                                    <td>{{ track.title }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Style:</td>
-                                    <td>{{ track.style }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Method:</td>
-                                    <td>{{ track.creation_method }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Created:</td>
-                                    <td>{{ track.creation_date }}</td>
-                                </tr>
-                                <tr>
-                                    <td>Submitted:</td>
-                                    <td>{{ track.submitted }}</td>
-                                </tr>
-                            </table>
-                            <br>
-                            <p class="center-align">Credits go to {{ track.credits_who }} for
-                                {{ track.credits_what }}</p>
-                            <div class="center-align er-license">
-                                <img src="static/images/{{ track.license }}" alt="licensed under {{ track.license }}">
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="col s12 m10 offset-m1 er-inner-wrap">
+                                    <h2>{{ track.artist_name }} - {{ track.title }}</h2>
+                                    <div class="er-info">
+                                        <p class="center-align">{{track.free_text}}</p>
+                                    </div>
+                                    <table>
+                                        <tr>
+                                            <td>Submitted by:</td>
+                                            <td><a href="{{url_for('view_user', user_id=track.user_id)}}"
+                                                    title="View user details">
+                                                    {{ track.user }} </a></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Artist:</td>
+                                            <td>{{ track.artist_name }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Track title:</td>
+                                            <td>{{ track.title }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Style:</td>
+                                            <td>{{ track.style }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Method:</td>
+                                            <td>{{ track.creation_method }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Created:</td>
+                                            <td>{{ track.creation_date }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Submitted:</td>
+                                            <td>{{ track.submitted }}</td>
+                                        </tr>
+                                    </table>
+                                    <br>
+                                    <p class="center-align">Credits go to {{ track.credits_who }} for
+                                        {{ track.credits_what }}</p>
+                                    <div class="center-align er-license">
+                                        <img src="https://evertrot.nl/codeinstitute/milestonethree/{{ track.license }}"
+                                            alt="licensed under {{ track.license }}">
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-            </li>
-            <li>
-                <div class="collapsible-header">
-                    <i class="material-icons">keyboard_arrow_down</i>Votes
-                    {# only show vote button to voters #}
-                    {% if session['user_role'] == 'voter' %}
-                    <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
-                        class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
-                    {% endif %}
-                </div>
-                <div class="collapsible-body">
-                    <div class="row">
-                        <div class="col s12 er-inner-wrap">
-                            <div class="">
-                                {% for vote in track.votes %}
-                                {% if loop.index == loop.length %}
-                                <h3 class="">{{ loop.length }} users have already voted for this track</h3>
-                                {% endif %}
-                                {% endfor %}
-                            </div>
-                            <table>
-                                {% for vote in track.votes %}
-                                <tr>
-                                    <td>
-                                        <a href="{{url_for('view_user', user_id=vote.user_id)}}"
-                                            title="View user details">
-                                            {{ vote.user }}:</a>
-                                    </td>
-                                    <td>
-                                        {{ vote.vote }}
-                                    </td>
-                                    <td class="right-align">
-                                        {{ vote.motivation }}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                                <tr>
-
-                                    <td><br><br>
-                                        Total score:
-                                    </td>
-                                    <td><br><br>
-                                        {{ track.total_votes }} points
-                                    </td>
-                                    <td></td>
-                                </tr>
-                            </table>
-
-                        </div>
-                        <div class="center-align"><br>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">
+                            <i class="material-icons">keyboard_arrow_down</i>Votes
                             {# only show vote button to voters #}
                             {% if session['user_role'] == 'voter' %}
                             <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
-                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote for
-                                this
-                                track now</a>
+                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote</a>
                             {% endif %}
                         </div>
+                        <div class="collapsible-body">
+                            <div class="row">
+                                <div class="col s12 er-inner-wrap">
+                                    <div class="">
+                                        {% for vote in track.votes %}
+                                        {% if loop.index == loop.length %}
+                                        <h3 class="">{{ loop.length }} users have already voted for this track</h3>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                    <table>
+                                        {% for vote in track.votes %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{url_for('view_user', user_id=vote.user_id)}}"
+                                                    title="View user details">
+                                                    {{ vote.user }}:</a>
+                                            </td>
+                                            <td>
+                                                {{ vote.vote }}
+                                            </td>
+                                            <td class="right-align">
+                                                {{ vote.motivation }}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        <tr>
+
+                                            <td><br><br>
+                                                Total score:
+                                            </td>
+                                            <td><br><br>
+                                                {{ track.total_votes }} points
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </table>
+
+                                </div>
+                                <div class="center-align"><br>
+                                    {# only show vote button to voters #}
+                                    {% if session['user_role'] == 'voter' %}
+                                    <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
+                                        class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote
+                                        for
+                                        this
+                                        track now</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="col s12 l4">
+                            <p class="btn-floating btn-small green"><i class="material-icons">hearing</i></p>
+                            <span class="er-track-icons"> {{ track.style }}</span>
+                        </div>
+                        <div class="col s12 l4">
+                            <p class="btn-floating btn-small amber"><i class="material-icons">palette</i></p>
+                            <span class="er-track-icons"> {{ track.creation_method }}</span>
+
+                        </div>
+
+                        <div class="col s12 l4">
+                            <p class="right-align"><span class="er-track-icons">Total score:</span>
+                                <span class="btn-floating btn-small waves-effect waves-light red pulse">
+                                    {{track.total_votes}}</span></p>
+                        </div>
                     </div>
-                </div>
-            </li>
-        </ul>
-        <div class="row">
-            <div class="col s12">
-                <div class="col s12 l4">
-                    <p class="btn-floating btn-small green"><i class="material-icons">hearing</i></p>
-                    <span class="er-track-icons"> {{ track.style }}</span>
-                </div>
-                <div class="col s12 l4">
-                    <p class="btn-floating btn-small amber"><i class="material-icons">palette</i></p>
-                    <span class="er-track-icons"> {{ track.creation_method }}</span>
-
-                </div>
-
-                <div class="col s12 l4">
-                    <p class="right-align"><span class="er-track-icons">Total score:</span>
-                        <span class="btn-floating btn-small waves-effect waves-light red pulse">
-                            {{track.total_votes}}</span></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 
 

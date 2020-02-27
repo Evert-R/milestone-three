@@ -1,3 +1,5 @@
+/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.26, autoprefixer: v9.7.3) */
+
 /* ----------------------------------------Code Institute Milestone-3 - Evert Rot*/
 
 /* Classes and id's that start with 'er-' are my own */
@@ -7,7 +9,7 @@
 html {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 0.9em;
-    background-image: url("/static/images/krypto_23.jpg");
+    background-image: url("https://evertrot.nl/codeinstitute/milestonethree/krypto_23.jpg");
     background-repeat: repeat;
     background-size: cover;
     background-attachment: fixed;
@@ -51,8 +53,17 @@ h3 {
     margin: 1rem 0 0 0;
 }
 
+label {
+    color: rgba(0, 0, 0, 0.90);
+}
+
 select {
     z-index: 1000;
+}
+
+iframe {
+    width: 100%;
+    border: 0;
 }
 
 .er-logo {
@@ -65,6 +76,7 @@ select {
     padding-bottom: 1rem;
     font-size: 0.9rem;
     margin: 0rem 1rem 0rem 1rem;
+    -webkit-box-sizing: content-box;
     box-sizing: content-box;
     border-radius: 1rem;
     background-color: rgba(120, 122, 144, 0.3);
@@ -173,6 +185,8 @@ select {
     overflow: hidden;
     z-index: 1;
     position: relative;
+    -webkit-transform: rotate(-10deg);
+    -ms-transform: rotate(-10deg);
     transform: rotate(-10deg);
     top: 3rem;
     left: -2rem;
@@ -214,10 +228,6 @@ select {
     color: rgba(0, 0, 0, 0.90);
 }
 
-label {
-    color: rgba(0, 0, 0, 0.90);
-}
-
 .input-field .prefix {
     font-size: 1.4rem;
 }
@@ -225,6 +235,26 @@ label {
 .select-wrapper input.select-dropdown {
     color: rgba(0, 0, 0, 0.90);
     font-size: 1rem;
+}
+
+.input-field input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.input-field input::-moz-placeholder, textarea::-moz-placeholder {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.input-field input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.input-field input::-ms-input-placeholder, textarea::-ms-input-placeholder {
+    font-size: 1rem;
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .input-field input::placeholder, textarea::placeholder {

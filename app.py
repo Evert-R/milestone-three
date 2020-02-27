@@ -223,6 +223,9 @@ def insert_track():
     embed_code = request.form.get('soundcloud')
     track_position = embed_code.find('track')
     track_number = embed_code[track_position+7:track_position+16]
+    if len(track_number) != 9:
+        return render_template('addtrack.html',
+                               message='Please provide a valid embed-code')
     """ get the current date and time, and add to the track """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
     """ insert track in database and return to the track overview page """
@@ -321,9 +324,14 @@ def insert_user():
 # view and edit specific user, the template checks if the logged user can edit
 @app.route('/view_user/<user_id>')
 def view_user(user_id):
-    return render_template('viewuser.html',
-                           user=mongo.db.users.find_one(
-                               {"_id": ObjectId(user_id)}))
+    if 'user_name' in session:
+        return render_template('viewuser.html',
+                               user=mongo.db.users.find_one(
+                                   {"_id": ObjectId(user_id)}))
+    else:
+        return render_template('login.html',
+                               message='Please login first to add a new track',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
 # process edit user form
@@ -502,6 +510,12 @@ def delete_style(style_id):
         return render_template('login.html',
                                message='Please login first to use this function',
                                users=mongo.db.users.find().sort('user_name'))
+
+# Missing page handling
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('permission.html',
+                           message='This page does not exist.')
 
 
 if __name__ == '__main__':

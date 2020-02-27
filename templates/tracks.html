@@ -80,7 +80,7 @@
         <ul class="collapsible">
             <li>
                 <div>
-                    <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"
+                    <iframe allow="autoplay"
                         src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/{{track.soundcloud}}&color=%23080606&visual=false&&auto_play=false&hide_related=true&show_comments=flase&show_user=true&show_reposts=false&show_teaser=false&show_playcount=false&liking=fals‌​e&sharing=false&download=false&following=false&buying=false"></iframe>
                 </div>
             </li>
@@ -137,7 +137,8 @@
                             <p class="center-align">Credits go to {{ track.credits_who }} for
                                 {{ track.credits_what }}</p>
                             <div class="center-align er-license">
-                                <img src="static/images/{{ track.license }}" alt="licensed under {{ track.license }}">
+                                <img src="https://evertrot.nl/codeinstitute/milestonethree/{{ track.license }}"
+                                    alt="licensed under {{ track.license }}">
                             </div>
                         </div>
                     </div>

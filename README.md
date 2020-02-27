@@ -152,6 +152,107 @@ The mock-up for this project are in the UXD folder wich you will find in the roo
 - [Online-convert](https://image.online-convert.com/convert-to-ico)
     - Convert jpg image to ico for favicon
 
+## Testing
+
+### Tools
+- [w3c Markup Validation](https://validator.w3.org)
+    - HTML validation: No errors
+- [w3c CSS Validation](https://jigsaw.w3.org/css-validator)
+    - CSS validation: No errors
+- [Chrome development tools](https://developers.google.com/web/tools/chrome-devtools)
+    - Css / responsive behaviour
+- [Pep8 online](http://pep8online.com)
+    - Python code test 
+
+### Manual testing
+#### Not logged in
+##### Protection against url's that can be copied from a user that was logged in
+- Clicked ```View all tracks```
+    - I could only view the tracks
+- Entered in the browser ```http://127.0.0.1:5000/add_track```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/view_users```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/start_contest```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/end_contest```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/edit_methods```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/edit_styles```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/mailinglist_users```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/view_user```
+    - Redirected to the error page
+- Entered in the browser ```http://127.0.0.1:5000/view_user/5e53e9cfa33afb09a25000bb```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/view_track```
+    - Redirected to the error page
+- Entered in the browser ```http://127.0.0.1:5000/view_track/5e53ea82a33afb09a25000bc```
+    - Redirected to the login page with a message to login
+- Entered in the browser ```http://127.0.0.1:5000/vote_track```
+    - Redirected to the error page
+- Entered in the browser ```http://127.0.0.1:5000/vote_track/5e53eb9aa33afb09a25000bf```
+    - Redirected to the login page with a message to login
+
+##### Forms
+- Menu option: ```Register```
+    - clicked ```register``` with no fields filled
+      - Got a message to fill out all the fields
+    - Filled fields one by one clicking ```register``` each time
+      - Got a message to fill out all required fields
+    - Filled all required fields but not a valid email address
+      - Got the message I should provide a valid email address
+    - Filled all required fields but no ```https``` in the website or profile picture url 
+      - Got a message to provide a valid url
+    - Registered with no profile picture
+      - Saw the default picture in my profile
+  
+- Menu option: ```Log-in```
+  - Provided random name
+    - Was redirected to the login page with a message that the user is unknown
+  - Provided random password
+    - Was redirected to the login page with a message that the password is incorrect
+
+#### Logged in as ```contributor```
+- Menu option: ```Add a track```
+    - clicked ```add your track``` with no fields filled
+      - Got a message to fill out all the fields
+    - Filled fields one by one clicking ```add your track``` each time
+      - Got a message to fill out all required fields
+    - Filled all fields but provided a wrong embed code
+      - Was redirected to the form with a message the embed code was invalid
+    - Entered in the browser ```http://127.0.0.1:5000/vote_track/5e53eb9aa33afb09a25000bf```
+      - Was redirected to the error page with the message that a contributor can't vote 
+
+#### Logged in as ```Voter```
+- Entered in the browser ```http://127.0.0.1:5000/add_track```
+    - Was redirected to the error page with the message that a voter can't participate
+- Clicked the ```vote button``` on a track
+  - Clicked ```Vote``` with no motivation
+    - Got a message to filll out all the fields
+  - Clicked ```Vote``` with no track rating
+    - Couldn't enter my vote
+
+### Issues encountered while testing
+- A wrong embed code wasn't detected
+  - Implemented a test wich redirects to the form, providing an error message
+
+
+
+- Menu option: ```Register```
+    - clicked ```register```
+      - Got a message to fill all the fields
+    - Filled fields one by one clicking ```register``` each time
+      - Got a message to fill all required fields
+    - Filled all required fields but not a valid email address
+      - Got the message I should provide a valid email address
+    - Filled all required fields but no ```https``` in the website and profile picture url 
+      - Got a message to provide a valid url
+    - Registered with no profile picture
+      - Saw the default picture in my profile
+  
 ## Deployment 
 This project was deployed on heroku from the ```master branch```
 
@@ -199,5 +300,12 @@ This project was deployed on heroku from the ```master branch```
 - Enter from the terminal:
     - ```heroku git:remote -a <your chosen app name>```
     - ```git push heroku master```
+  
+## Credits
+### Media content
+- Default profile picture & copyright sign
+  - [Pixabay](https://pixabay.com)
+- Creative commons logos
+  - [Creative Commons](https://creativecommons.org)
 
-[Click here to view the deployed website](https://crowd-finding.herokuapp.com/)
+[Click here to view the deployed website](https://crowd-finding.herokuapp.com)

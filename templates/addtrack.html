@@ -8,8 +8,14 @@
 <div class="row">
     <div class="col s12 er-light z-depth-5">
         <br>
+        {% if message %}
+        <p class="center-align er-message">{{ message }}</p>
+        {% endif %}
+        <p class="center-align">
+            <a href="https://help.soundcloud.com/hc/en-us/articles/115003568008-Embedding-a-track-or-playlist-"
+                target="blank">Click to see how to get your tracks embed-code</a></p>
+        <br>
         <form action="{{ url_for('insert_track') }}" method="POST" class="col s12">
-
             <div class="row">
                 <div class="input-field col s12 m6">
                     <i class="material-icons prefix">account_circle</i>
