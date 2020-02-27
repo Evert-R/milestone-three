@@ -61,7 +61,7 @@ select {
 .er-inner-wrap {
     line-height: unset;
     font-size: 0.9rem;
-    margin: 1rem;
+    margin: 0rem 1rem 0rem 1rem;
     box-sizing: content-box;
     border-radius: 1rem;
     background-color: rgba(120, 122, 144, 0.3);

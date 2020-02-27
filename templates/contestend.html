@@ -7,23 +7,22 @@
 
 <div class="row">
     <div class="col s12 er-dark z-depth-5">
-        <h1 class="center-align">{{ contest.name }}</h1>
+        <h1 class="center-align">Contest has ended</h1>
     </div>
     <div class="col s12 er-light z-depth-5">
-        <p>This contest started on {{ session['start_date'] }}</p>
-        <p>This contest will end on {{ session['end_date'] }}</p>
-        <p>There are {{ total_tracks }} tracks posted in this contest.</p>
+
     </div>
 </div>
-
 {% for track in tracks %}
-<div class="row">
 
+<div class="row">
+    {# Only show ranking on whole list #}
+    {% if ranking != 'false' %}
     <div class="er-float z-depth-3">
-        <p class="center-align">Rank #<br><span>1</span>
+        <p class="center-align">Rank #<br><span>{{ loop.index }}</span>
         </p>
     </div>
-
+    {% endif %}
     <div class="col s12 er-light">
         <div class="er-track-title">
             <h2>{{ track.artist_name }} - {{ track.title }}</h2>
@@ -176,8 +175,6 @@
         </div>
     </div>
 </div>
-
-
 
 {% endfor %}
 {% endblock %}

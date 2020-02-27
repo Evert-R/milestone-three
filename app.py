@@ -27,15 +27,23 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/index')
 def index():
-    if mongo.db.contests.count_documents({}) == 0:
-        return render_template('permission.html',
-                               message='No contest is running at the moment')
+    if mongo.db.contests.count_documents({'active': True}) == 0:
+        return redirect(url_for('contest_ended'))
     current_contest = mongo.db.contests.find_one({'active': True})
     session['start_date'] = current_contest['start_date']
     session['end_date'] = current_contest['end_date']
     return render_template('main.html',
                            contest=current_contest,
-                           tracks=mongo.db.tracks.find().sort("total_votes", -1),
+                           tracks=mongo.db.tracks.find().sort("total_votes", -1).limit(1),
+                           total_tracks=mongo.db.tracks.count_documents({})
+                           )
+
+
+@app.route('/contest_ended')
+def contest_ended():
+    return render_template('contestend.html',
+                           contests=mongo.db.contests.find().sort("_id", -1),
+                           tracks=mongo.db.tracks.find().sort("total_votes", -1).limit(5),
                            total_tracks=mongo.db.tracks.count_documents({})
                            )
 
@@ -102,20 +110,25 @@ def insert_contest():
     return redirect(url_for('index'))
 
 
+# end contest (admin only)
+@app.route('/end_contest')
+def end_contest():
+    mongo.db.contests.update_one({'active': True}, {'$set': {'active': False}})
+    return redirect(url_for('get_tracks'))
+
+
 # track listing page
 @app.route('/get_tracks')
 def get_tracks():
     if mongo.db.contests.count_documents({}) == 0:
         return render_template('permission.html',
                                message='No contest is running at the moment')
-    contest = mongo.db.contests.find_one({'active': True})
-    if mongo.db.tracks.count_documents({'contest': ObjectId(contest['_id'])}) == 0:
+    if mongo.db.tracks.count_documents({}) == 0:
         return render_template('tracks.html',
                                no_tracks=True)
     else:
         return render_template('tracks.html',
-                               tracks=mongo.db.tracks.find(
-                                   {'contest': ObjectId(contest['_id'])}).sort("total_votes", -1),
+                               tracks=mongo.db.tracks.find().sort("total_votes", -1),
                                users=mongo.db.users.find().sort('user_name'),
                                styles=mongo.db.styles.find().sort('style'),
                                methods=mongo.db.methods.find().sort('method'))
@@ -205,7 +218,6 @@ def add_track():
 # process add track form
 @app.route('/insert_track', methods=['POST'])
 def insert_track():
-    contest = mongo.db.contests.find_one({'active': True})
     """ Get soundcloud embed code and strip the track number
         so we can use our own modified embed code """
     embed_code = request.form.get('soundcloud')
@@ -214,8 +226,7 @@ def insert_track():
     """ get the current date and time, and add to the track """
     now = datetime.now().strftime("%d-%m-%Y, %H:%M:%S")
     """ insert track in database and return to the track overview page """
-    mongo.db.tracks.insert_one({'contest': ObjectId(contest['_id']),
-                                'user': session['user_name'],
+    mongo.db.tracks.insert_one({'user': session['user_name'],
                                 'user_id': ObjectId(session['user_id']),
                                 'submitted': now,
                                 'soundcloud': track_number,
@@ -474,14 +485,6 @@ def delete_style(style_id):
         return render_template('login.html',
                                message='Please login first to use this function',
                                users=mongo.db.users.find().sort('user_name'))
-
-
-# delete all tracks (admin only)
-@app.route('/reset_contest')
-def reset_contest():
-    tracks = mongo.db.tracks
-    """tracks.drop()"""
-    return redirect(url_for('get_tracks'))
 
 
 if __name__ == '__main__':
