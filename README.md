@@ -102,7 +102,9 @@ A third user role is the ```administrator``` with the following features:
 - Edit methods
   - Enables the administrator to add or delete creation methods
 - User list
-  - Enables the administrator to view all registered users 
+  - Enables the administrator to view all registered users
+- Mailing list
+  -  Enables the administrator to view all subscribers to the mailingt list
 
 ### Features left to implement
 - True secure authentication

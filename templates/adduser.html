@@ -37,15 +37,31 @@
                     <label for="user_name">Password:</label>
                 </div>
 
-                <div class="input-field col s12 m6">
-                    <p>
-                        <label for="mailing_list">
-                            <input type="checkbox" checked="checked" id="mailing_list" name="mailing_list"
-                                value="true" />
-                            <span>Sign me up for the newsletter</span>
+                <div class="col s12 m3">
+                    <p class="right-align">
+                        <label>
+                            <input name="user_role" id="user_role" type="radio" value="contributor">
+                            <span>Register as artist</span>
+                            <a class="tooltipped" data-position="bottom"
+                                data-tooltip="As an artist you will not be able to vote">
+                                <i class="material-icons prefix">help_outline</i>
+                            </a>
                         </label>
                     </p>
                 </div>
+                <div class="col s12 m3">
+                    <p class="right-align">
+                        <label>
+                            <input name="user_role" id="user_role" type="radio" value="voter" checked>
+                            <span>Register to vote </span>
+                            <a class="tooltipped" data-position="bottom"
+                                data-tooltip="As a voter you will not be able to participate in the contest">
+                                <i class="material-icons prefix">help_outline</i>
+                            </a>
+                        </label>
+                    </p>
+                </div>
+
             </div>
             <div class="row">
                 <div class="input-field col s12">
@@ -80,34 +96,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col s12 m4">
-                    <p>
-                        <label>
-                            <input name="user_role" id="user_role" type="radio" value="contributor">
-                            <span>Register as an artist </span>
-                            <a class="tooltipped" data-position="bottom"
-                                data-tooltip="As an artist you will not be able to vote">
-                                <i class="material-icons prefix">help_outline</i>
-                            </a>
-                        </label>
-                    </p>
-                </div>
-                <div class="col s12 m4">
-                    <p>
-                        <label>
-                            <input name="user_role" id="user_role" type="radio" value="voter" checked>
-                            <span>Register to vote </span>
-                            <a class="tooltipped" data-position="bottom"
-                                data-tooltip="As a voter you will not be able to participate in the contest">
-                                <i class="material-icons prefix">help_outline</i>
-                            </a>
-                        </label>
-                    </p>
-                </div>
-                <div class="col s12 m4">
+
+
+                <div class="col s12 m6">
                     <button class="btn waves-effect waves-light blue-grey darken-3" type="submit">Register
                         <i class="material-icons right">person_add</i>
                     </button>
+                </div>
+                <div class="input-field col s12 m6">
+                    <p>
+                        <label for="mailing_list">
+                            <input type="checkbox" checked="checked" id="mailing_list" name="mailing_list"
+                                value="true" />
+                            <span>Sign me up for the newsletter</span>
+                        </label>
+                    </p>
                 </div>
             </div>
 

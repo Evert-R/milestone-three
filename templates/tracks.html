@@ -192,14 +192,15 @@
                             </table>
 
                         </div>
-                        <div class="center-align"><br>
-                            {# only show vote button to voters #}
-                            {% if session['user_role'] == 'voter' %}
-                            <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
-                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote for this
-                                track now</a>
-                            {% endif %}
-                        </div>
+
+                    </div>
+                    <div class="center-align er-vote-button">
+                        {# only show vote button to voters #}
+                        {% if session['user_role'] == 'voter' %}
+                        <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
+                            class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote for this
+                            track now</a>
+                        {% endif %}
                     </div>
                 </div>
             </li>

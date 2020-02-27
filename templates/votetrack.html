@@ -21,18 +21,31 @@
         <form action="{{ url_for('insert_vote', track_id=track._id) }}" method="POST" class="col s12">
 
             <div class="row">
-                <div class="input-field col s12">
+                <div class="input-field col s12 m6">
                     <i class="material-icons prefix">account_circle</i>
                     <input value="{{ session['user_name'] }}" id="user" name="user" type="text" readonly>
                     <label for="user_name">User name:</label>
                 </div>
+                <div class="input-field col s12 m6">
+                    <i class="material-icons prefix">star</i>
+                    <select id="vote" name="vote" class="validate" required="" aria-required="true">
+                        <option value="" disabled selected>Please rate this track</option>
+                        <option value="0">0 points</option>
+                        <option value="1">1 points</option>
+                        <option value="2">2 points</option>
+                        <option value="3">3 points</option>
+                        <option value="4">4 points</option>
+                        <option value="5">5 points</option>
+                        <option value="6">6 points</option>
+                        <option value="7">7 points</option>
+                        <option value="8">8 points</option>
+                        <option value="9">9 points</option>
+                        <option value="10">10 points</option>
+                    </select>
+                    <label>Track rating:</label>
+                </div>
             </div>
-            <div class="row">
-                <i class="material-icons">star</i>
-                <p class="range-field">
-                    <input type="range" id="vote" name="vote" min="1" max="10" required="" aria-required="true" />
-                </p>
-            </div>
+
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">subject</i>
@@ -41,8 +54,6 @@
                     <label for="motivation">Free text</label>
                 </div>
             </div>
-
-
 
             <div class="row">
                 <button class="btn waves-effect waves-light blue-grey darken-3" type="submit">Vote
