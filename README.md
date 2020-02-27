@@ -26,7 +26,7 @@ A third user role is the ```administrator``` with the following features:
 1. This ia a fictional project for educational purposes created for the [code institute's Full Stack Software Development course](https://codeinstitute.net) and is in no way meant to go online for a broad audience.
 2. Authorization was not required for this project and was only implemented to make a distinction between users and wich functions they can use. It in no way will provide the security wich a true authorization system will provide.
 3. All user accounts and their information is fictional, passwords are set to ```1234```
-4. The tracks already in the database are real. I only used tracks of people that I personally know. The user accounts wich added the tracks are again fictional and do not display the actual artist.
+4. The tracks already in the database are real. I only used tracks of people that I personally know or made myself. The user accounts of contributers wich added the tracks are again fictional and do not display the actual artists.
 5. The admin account can be accessed with the following credentials: ```username: admin``` - ```password: 1234```
 
 #### UX
@@ -55,7 +55,16 @@ A third user role is the ```administrator``` with the following features:
 - Main page
   - Provides all the visitors with information about the running or ended contest
 - Register
-  - Enables all the visitors to register as an active user
+  - Enables all the visitors to register as an active user along with these details:
+    -   user name
+    -   password
+    -   email address
+    -   user role
+    -   profile pic (Standard will be used when none is provided)
+    -   country
+    -   city
+    -   website (optional)
+    -   mailing list subscription (yes/no)   
 - Log-in
   - Enables all registered users to log in to their account
 - Log-out
@@ -104,11 +113,11 @@ A third user role is the ```administrator``` with the following features:
 - User list
   - Enables the administrator to view all registered users
 - Mailing list
-  -  Enables the administrator to view all subscribers to the mailingt list
+  -  Enables the administrator to view all subscribers to the mailing list
 
 ### Features left to implement
 - True secure authentication
-- Upload files directly to the server to be completely independent using an local music player
+- Upload files directly to the server, to be completely independent, played using a local music player
   - for example: [Amplitude.js](https://521dimensions.com/open-source/amplitudejs)
 - Upload profile pictures directly to the server to be more user friendly
   

@@ -9,16 +9,46 @@
     <div class="col s12 er-dark z-depth-5">
         <h1 class="center-align">{{ contest.name }}</h1>
     </div>
+</div>
+<div class="row">
     <div class="col s12 er-light z-depth-5">
-        <p>This contest started on {{ session['start_date'] }}</p>
-        <p>This contest will end on {{ session['end_date'] }}</p>
-        <p>There are {{ total_tracks }} tracks posted in this contest.</p>
+        <div class="row">
+            <div class="col s12">
+                <h2>Welcome to Crowd Finding</h2>
+                <p class="center-align">A music contest for starting musicians.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m7 offset-m1 er-inner-wrap">
+                <p class="flow-text">Everyone with a soundcloud can join in. You don't even have to upload your track
+                    again, but you can simply use the embed-code wich is provided with each soundcloud track. Just
+                    register on this page as an artist and of you go !<br> When
+                    the contest is over the 5 tracks with the highest ranking will be published as an album on
+                    spotify and Itunes.</p>
+            </div>
+            <div class="col s12 m3 er-image">
+                <img src="{{url_for('static', filename='images/soundcloud.png')}}" alt="soundcloud logo"
+                    class="circle responsive-img">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m7 offset-m4 er-inner-wrap">
+                <p class="flow-text">Not an artist? We encourage to you to register as a voter so you can decide for
+                    yourself wich track you will find on spotify and itunes in the near future.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12 m10 offset-m1 er-inner-wrap er-info">
+                <p class="center-align">This contest started on {{ session['start_date'] }} and will end on
+                    {{ session['end_date'] }}.<br>
+                    At the moment there are a total of {{ total_tracks }} tracks already in this contest.</p>
+            </div>
+        </div>
     </div>
 </div>
 
 {% for track in tracks %}
 <div class="row">
-
     <div class="er-float z-depth-3">
         <p class="center-align">Rank #<br><span>1</span>
         </p>
@@ -26,6 +56,7 @@
 
     <div class="col s12 er-light">
         <div class="er-track-title">
+            <p class="center-align">This is our current Number 1 :</p>
             <h2>{{ track.artist_name }} - {{ track.title }}</h2>
         </div>
         <ul class="collapsible">
@@ -147,7 +178,8 @@
                             {# only show vote button to voters #}
                             {% if session['user_role'] == 'voter' %}
                             <a href="{{url_for('vote_track', track_id=track._id)}}" title="Vote for this track"
-                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote for this
+                                class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Vote for
+                                this
                                 track now</a>
                             {% endif %}
                         </div>
