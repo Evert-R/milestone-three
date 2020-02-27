@@ -364,6 +364,23 @@ def view_users():
                                users=mongo.db.users.find().sort('user_name'))
 
 
+# See the users for mailinglist (admin only)
+@app.route('/mailinglist_users')
+def mailinglist_users():
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            return render_template('viewusers.html',
+                                   users=mongo.db.users.find({'mailing_list': 'true'}).sort('user_name'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
+
+
 # vote for a track form
 @app.route('/vote_track/<track_id>')
 def vote_track(track_id):
@@ -490,4 +507,4 @@ def delete_style(style_id):
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=False)
+            debug=True)
