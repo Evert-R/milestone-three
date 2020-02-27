@@ -31,6 +31,10 @@ A third user role is the ```administrator``` with the following features:
 
 #### UX
 
+### Mock-ups
+The mock-up for this project are in the UXD folder wich you will find in the root of this project.
+- [Wireframe](UXD/wireframe.jpg)
+
 ### User stories
 * As a first time visitor I want to see a description of website on my first page load
 * As a first time visitor I want to be able to see the tracks that have already been submitted

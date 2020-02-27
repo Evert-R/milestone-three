@@ -78,6 +78,10 @@ select {
     padding: 0.3rem;
 }
 
+.er-image {
+    height: 100%;
+}
+
 .er-image img {
     margin-top: 1.5rem;
     width: 100%;

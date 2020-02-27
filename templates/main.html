@@ -2,10 +2,6 @@
 {% block content %}
 
 <div class="row">
-
-</div>
-
-<div class="row">
     <div class="col s12 er-dark z-depth-5">
         <h1 class="center-align">{{ contest.name }}</h1>
     </div>
@@ -26,9 +22,12 @@
                     the contest is over the 5 tracks with the highest ranking will be published as an album on
                     spotify and Itunes.</p>
             </div>
-            <div class="col s12 m3 er-image">
-                <img src="{{url_for('static', filename='images/soundcloud.png')}}" alt="soundcloud logo"
-                    class="circle responsive-img">
+            <div class="col s12 m3">
+                <div class="er-image">
+                    <a href="https://www.soundcloud.com" target="blank" title="Goto soundcloud page">
+                        <img src="{{url_for('static', filename='images/soundcloud.png')}}" alt="soundcloud logo"
+                            class="circle responsive-img"></a>
+                </div>
             </div>
         </div>
         <div class="row">
