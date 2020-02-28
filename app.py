@@ -330,7 +330,7 @@ def view_user(user_id):
                                    {"_id": ObjectId(user_id)}))
     else:
         return render_template('login.html',
-                               message='Please login first to add a new track',
+                               message='Please login first to view a user profile',
                                users=mongo.db.users.find().sort('user_name'))
 
 
@@ -353,6 +353,24 @@ def update_user(user_id):
                    'last_updated': now
                    }})
     return redirect(url_for('get_tracks'))
+
+
+# delete a user (admin only)
+@app.route('/delete_method/<user_id>')
+def delete_user(user_id):
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            users = mongo.db.users
+            users.delete_one({'_id': ObjectId(user_id)})
+            return redirect(url_for('view_users'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
 
 
 # See the users list (admin only)
@@ -528,4 +546,4 @@ def internal_error(error):
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=False)
+            debug=True)
