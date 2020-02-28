@@ -201,6 +201,10 @@ iframe {
 
 /* Materialize classes */
 
+.container {
+    width: 98%;
+}
+
 .sidenav li>a {
     color: white;
 }
@@ -280,9 +284,12 @@ a.tooltipped {
 
 /* ----------------------------------------Responsive breakpoints */
 
-/* --------------------------768 - MD */
+/* --------------------------768 -  */
 
 @media(min-width: 768px) {
+    .container {
+        width: 90%;
+    }
     .input-field {
         margin-top: 0rem;
         margin-bottom: 0rem;

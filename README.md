@@ -7,13 +7,13 @@
 
 
 ## Project purpose
-The purpose of this application is to host a competition of music tracks for starting musicians. As [soundcloud](https://www.soundcloud.com) is by far the most used hosting website for artists, they can simply use the embed-code provided with each soundcloud track to enter a new track in the contest. Visitors of the website can view the track listing, with some details about the work provided by the artist, and then vote for each track. The more points, the higher the track will appear in the list. After a pre-defined period of time the competition ends and the first five will show on the front page as winners. The host of the competition can then use these tracks to release these as an album on spotify and itunes or media such as cd or vinyl. The host will also get some insight in why certain tracks are liked, and others less, as well as build a database of users to use for a mailing list, to keep them updated on the progress and future actions.    
+The purpose of this application is to host a competition of music tracks for starting musicians. As [soundcloud](https://www.soundcloud.com) is by far the most used hosting website for artists, they can simply use the embed-code provided with each soundcloud track to enter a new track in the contest. Visitors of the website can view the track listing, with some details about the work provided by the artist, and then vote for each track. The more points, the higher the track will appear in the list. After a pre-defined period of time the competition ends and the highest rated five tracks will show on the front page as winners. The host of the competition can then use these tracks to release these as an album on spotify and itunes or media such as cd or vinyl. The host will also get an insight in why certain tracks are liked, and others less. The app also builds a database of users to be used for a mailing list, to keep them updated on the progress and future actions or advertisements.    
 
 There is a registration system for users wich divides them into two categories
 1. ```Contributors```
 2. ```Voters```
 
-The app automatically shows only the features wich the logged in user is allowed to use. People registered as contributors cannot vote, and those registered as voters will not be able to participate in the contest.
+The app automatically shows only the features wich the logged in user is allowed to use to avoid confusion. People registered as contributors cannot vote, and those registered as voters will not be able to participate in the contest.
 
 A third user role is the ```administrator``` with the following features: 
 1. Start a contest
@@ -29,11 +29,14 @@ A third user role is the ```administrator``` with the following features:
 4. The tracks already in the database are real. I only used tracks of people that I personally know or made myself. The user accounts of contributers wich added the tracks are again fictional and do not display the actual artists.
 5. The admin account can be accessed with the following credentials: ```username: admin``` - ```password: 1234```
 
-#### UX
-
-### Mock-ups
+## UX
+### Mock-up
 The mock-up for this project are in the UXD folder wich you will find in the root of this project.
 - [Wireframe](UXD/wireframe.jpg)
+
+### Design choices
+This app was designed to be used without a learning curve. Only the options that are relevant to the logged in user are shown, so that they will always click the right button. The materialize library was used to provide consistent elements that can be easily used by the user and wich adapt to every screen size. When something does go wrong this is pointed out in the form itself, or if it is database related (password, username or embed-code) the user is redirected back to the form with a message about the mistake. There's also an error page, wich should not appear in 'normal' use. 
+Only a few distinctive colors are used so that all elements are clearly seprated and don't blur the overall view.
 
 ### User stories
 * As a first time visitor I want to see a description of website on my first page load
@@ -124,7 +127,7 @@ The mock-up for this project are in the UXD folder wich you will find in the roo
 - Upload files directly to the server, to be completely independent, played using a local music player
   - for example: [Amplitude.js](https://521dimensions.com/open-source/amplitudejs)
 - Upload profile pictures directly to the server to be more user friendly
-  
+- Automate the duration of the contest based on the current date 
 
 ## Technologies Used
 - [VSCode](https://code.visualstudio.com)
@@ -146,11 +149,70 @@ The mock-up for this project are in the UXD folder wich you will find in the roo
 - [Materialize](https://materializecss.com)
     - Grid, icons, colapsibles, boilerplate-html
 - [Google Fonts](https://fonts.google.com)
-    - Fonts (Source code pro/Allerta Stencil)
+    - Fonts (Krona one/Orbitron)
 - [Autoprefixer](https://autoprefixer.github.io)
     - CSS prefixes for different browsers 
 - [Online-convert](https://image.online-convert.com/convert-to-ico)
     - Convert jpg image to ico for favicon
+
+## Data Structure
+### MongoDB
+- Database:
+    - crowd_finding
+#### Collections
+##### tracks: 
+```{'_id':              ObjectId,   (By mongoDB) 
+    'user':             string      (corresponds with users collection)
+    'user_id':          ObjectId    (corresponds with users collection)
+    'submitted':        string      (date), (DD-MM-YYYY, HH:MM:SS)
+    'soundcloud':       string      (stripped from soundcloud embed code)
+    'artist_name':      string
+    'title':            string
+    'style':            string
+    'free_text':        string
+    'creation_method':  string
+    'credits_who':      string
+    'credits_what':     string
+    'creation_date':    string      (date), (DD-MM-YYYY, HH:MM:SS)
+    'license':          string      (file name of license logo)
+    'last_updated':     string      (date), (DD-MM-YYYY, HH:MM:SS)
+    'total_votes':      int32
+    'votes':            array of objects {user: string
+                                          user_id: ObjectID
+                                          vote: int32
+                                          motivation: string}                                
+```
+
+##### users: 
+```{'_id':              ObjectID,  (by MongoDB) 
+    'user_name':        string
+    'user_email':       string
+    'user_role':        string
+    'profile_pic':      string     (URL)
+    'user_city':        string
+    'user_country':     string
+    'user_website':     string     (URL)
+    'mailing_list':     string
+    'registered':       string     (date), (DD-MM-YYYY, HH:MM:SS)
+    'last_updated':     string     (date), (DD-MM-YYYY, HH:MM:SS)
+    'password':         string    
+```
+##### contests: 
+```{'_id':              ObjectID,  (by MongoDB) 
+    'name':             string
+    'start_date':       string     (date), (DD-MM-YYYY)
+    'end_date':         string     (date), (DD-MM-YYYY)
+    'active':           boolean    (URL)    
+```
+
+##### methods: 
+```{'_id':              ObjectID,  (by MongoDB) 
+    'method':           string    
+```
+##### styles: 
+```{'_id':              ObjectID,  (by MongoDB) 
+    'style':           string    
+```
 
 ## Testing
 
@@ -229,35 +291,50 @@ The mock-up for this project are in the UXD folder wich you will find in the roo
 #### Logged in as ```Voter```
 - Entered in the browser ```http://127.0.0.1:5000/add_track```
     - Was redirected to the error page with the message that a voter can't participate
-- Clicked the ```vote button``` on a track
+- Clicked the ```vote``` button on a track
   - Clicked ```Vote``` with no motivation
     - Got a message to filll out all the fields
   - Clicked ```Vote``` with no track rating
     - Couldn't enter my vote
 
+### Responsive behaviour
+#### Screen sizes: 360 - 600 px
+- All elements are on a single row
+- Container width is maximized
+- Mobile menu is used
+
+#### Screen sizes: 600 - 996 px
+- Two form elements per row (except for long urls)
+
+#### Screen sizes: 996 - px
+- Desktop menu is used
+
 ### Issues encountered while testing
 - A wrong embed code wasn't detected
-  - Implemented a test wich redirects to the form, providing an error message
-
-
-
-- Menu option: ```Register```
-    - clicked ```register```
-      - Got a message to fill all the fields
-    - Filled fields one by one clicking ```register``` each time
-      - Got a message to fill all required fields
-    - Filled all required fields but not a valid email address
-      - Got the message I should provide a valid email address
-    - Filled all required fields but no ```https``` in the website and profile picture url 
-      - Got a message to provide a valid url
-    - Registered with no profile picture
-      - Saw the default picture in my profile
+  - Implemented a test wich redirects back to the form, providing an error message
   
 ## Deployment 
 This project was deployed on heroku from the ```master branch```
 
 ## Deployment instructions
 ### Follow these instructions to deploy this project:
+
+#### Create the first user (administrator)
+- Use the following structure
+
+```{'_id':              ObjectID,  (by MongoDB) 
+    'user_name':        STRING     'admin'
+    'user_email':       string
+    'user_role':        string     'administrator
+    'profile_pic':      string     (URL)
+    'user_city':        string
+    'user_country':     string
+    'user_website':     string     (URL)
+    'mailing_list':     string
+    'registered':       string     (date), (DD-MM-YYYY, HH:MM:SS)
+    'last_updated':     string     (date), (DD-MM-YYYY, HH:MM:SS)
+    'password':         string    
+```
 
 #### Create a new repository
 - Create a new folder on your local machine
@@ -292,7 +369,6 @@ This project was deployed on heroku from the ```master branch```
 - click ```Ok``` to authorize the connection
 - use the search button to select the apropiate repository
 
-### Local deployment
 #### Alternatively you can connect your local folder directy to heroku
 - Enter from your local terminal: 
     - ```heroku login```
@@ -300,7 +376,28 @@ This project was deployed on heroku from the ```master branch```
 - Enter from the terminal:
     - ```heroku git:remote -a <your chosen app name>```
     - ```git push heroku master```
-  
+
+#### Local deployment
+- First in the root folder create a new file named: ```env.py```
+    - Put the following code in the file:
+
+          import os
+          os.environ["MONGO_URI"] = "<Your personal MongoDB URI>"
+          os.environ["secret_key"] = "<randum_string>"
+
+    - The app will first look for this file to load the environment variables
+    - If this file is not found it assumes that they are allready present in the environment (For example heroku)
+    - This is to ensure our credentials are not exposed on github (add this file to the ```.gitignore``` file)
+
+- To create a virtual environment enter from the terminal in you IDE: 
+    - ```python -m .venv venv```
+- Now activate the virtual envirenment
+    - ```.venv\Scripts\activate```
+- Install the requirements
+    - ```pip -r requirements.txt```
+- Start the app
+    - ```python -m flask run```
+
 ## Credits
 ### Media content
 - Default profile picture & copyright sign
