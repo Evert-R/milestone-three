@@ -145,7 +145,7 @@ Only a few distinctive colors are used so that all elements are clearly seprated
     - Code Editor
 - [Git bash](https://gitforwindows.org)
     - Version control from windows
-- [Heroku]()
+- [Heroku](https://www.heroku.com)
     - Deployment
 - [Flask](https://palletsprojects.com/p/flask)
     - Python framework
