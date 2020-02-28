@@ -518,6 +518,13 @@ def page_not_found(e):
                            message='This page does not exist.')
 
 
+# Missing user or track handling
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('permission.html',
+                           message='This page does not exist.')
+
+
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),

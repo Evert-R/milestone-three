@@ -23,10 +23,10 @@ A third user role is the ```administrator``` with the following features:
 5. View a user list to use for a mailing list (Users can decide themselves if they want this upon registration)
 
 ### Important notices
-1. This ia a fictional project for educational purposes created for the [code institute's Full Stack Software Development course](https://codeinstitute.net) and is in no way meant to go online for a broad audience.
+1. This is a fictional project for educational purposes created for the [code institute's Full Stack Software Development course](https://codeinstitute.net) and is in no way meant to go online for a broad audience.
 2. Authorization was not required for this project and was only implemented to make a distinction between users and wich functions they can use. It in no way will provide the security wich a true authorization system will provide.
 3. All user accounts and their information is fictional, passwords are set to ```1234```
-4. The tracks already in the database are real. I only used tracks of people that I personally know or made myself. The user accounts of contributers wich added the tracks are again fictional and do not display the actual artists.
+4. The tracks already in the database are real. I only used tracks of people that I personally know or made myself. The user accounts of contributors wich added the tracks are again fictional and do not display the actual artists.
 5. The admin account can be accessed with the following credentials: ```username: admin``` - ```password: 1234```
 
 ## UX
@@ -157,9 +157,9 @@ Only a few distinctive colors are used so that all elements are clearly seprated
 
 ## Data Structure
 ### MongoDB
-- Database:
-    - crowd_finding
-#### Collections
+#### Database:
+- crowd_finding
+#### Collections :
 ##### tracks: 
 ```{'_id':              ObjectId,   (By mongoDB) 
     'user':             string      (corresponds with users collection)
@@ -318,7 +318,8 @@ This project was deployed on heroku from the ```master branch```
 
 ## Deployment instructions
 ### Follow these instructions to deploy this project:
-
+- Note :
+  - Because Heroku doesn't allow media files the used images are stored externally on my hosting account.
 #### Create the first user (administrator)
 - Use the following structure
 
