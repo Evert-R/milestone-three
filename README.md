@@ -7,39 +7,44 @@
 
 
 ## Project purpose
-The purpose of this application is to host a competition of music tracks for starting musicians. As [soundcloud](https://www.soundcloud.com) is by far the most used hosting website for artists, they can simply use the embed-code provided with each soundcloud track to enter a new track in the contest. Visitors of the website can view the track listing, with some details about the work provided by the artist, and then vote for each track. The more points, the higher the track will appear in the list. After a pre-defined period of time the competition ends and the highest rated five tracks will show on the front page as winners. The host of the competition can then use these tracks to release these as an album on spotify and itunes or media such as cd or vinyl. The host will also get an insight in why certain tracks are liked, and others less. The app also builds a database of users to be used for a mailing list, to keep them updated on the progress and future actions or advertisements.    
+The purpose of this application is to host a competition of music tracks for starting musicians. As [soundcloud](https://www.soundcloud.com) is by far the most used hosting website for artists, they can simply use the embed-code provided with each soundcloud track to enter a new track in the contest. 
+All visitors of the website can view the track listing, with some details about the work provided by the artist and, when registered as a voter, they can vote for each track. The more points, the higher the track will appear in the list. 
+After a pre-defined period of time the competition ends and the highest rated five tracks will be shown on the front page as winners. The host of the competition can then use these tracks to release them as an album on spotify and itunes or media such as cd or vinyl. The host will also get an insight in why certain tracks are liked, and others less.
+The app also builds up a database of users to be used for a mailing list, to keep them updated on the progress of the contest, future actions and advertisements.    
 
 There is a registration system for users wich divides them into two categories
 1. ```Contributors```
 2. ```Voters```
 
-The app automatically shows only the features wich the logged in user is allowed to use to avoid confusion. People registered as contributors cannot vote, and those registered as voters will not be able to participate in the contest.
+The app automatically only shows the features wich the logged in user is allowed to use to avoid confusion. People registered as contributors cannot vote, and those registered as voters will not be able to participate in the contest.
 
 A third user role is the ```administrator``` with the following features: 
 1. Start a contest
 2. End a contest
 3. Add or delete creation methods, wich let users select wich equipment or instruments they used
 4. Add or delete music styles, to let users select the music style of their track
-5. View a user list to use for a mailing list (Users can decide themselves if they want this upon registration)
+5. Delete a track
+6. Delete a user account
+7. View a user list to use for a mailing list (Users can decide themselves if they want this upon registration)
 
 ### Important notices
 1. This is a fictional project for educational purposes created for the [code institute's Full Stack Software Development course](https://codeinstitute.net) and is in no way meant to go online for a broad audience.
 2. Authorization was not required for this project and was only implemented to make a distinction between users and wich functions they can use. It in no way will provide the security wich a true authorization system will provide.
 3. All user accounts and their information is fictional, passwords are set to ```1234```
-4. The tracks already in the database are real. I only used tracks of people that I personally know or made myself. The user accounts of contributors wich added the tracks are again fictional and do not display the actual artists.
+4. The tracks already in the database are real. I only used tracks of people that I personally know or made myself. The user accounts of contributors who added the tracks are again fictional and do not display the actual artists.
 5. The admin account can be accessed with the following credentials: ```username: admin``` - ```password: 1234```
 
 ## UX
 ### Mock-up
-The mock-up for this project are in the UXD folder wich you will find in the root of this project.
+The mock-up for this project is in the UXD folder wich you will find in the root of this project.
 - [Wireframe](UXD/wireframe.jpg)
 
 ### Design choices
-This app was designed to be used without a learning curve. Only the options that are relevant to the logged in user are shown, so that they will always click the right button. The materialize library was used to provide consistent elements that can be easily used by the user and wich adapt to every screen size. When something does go wrong this is pointed out in the form itself, or if it is database related (password, username or embed-code) the user is redirected back to the form with a message about the mistake. There's also an error page, wich should not appear in 'normal' use. 
+This app was designed to be used without a learning curve. Only the options that are relevant to the logged in user are shown, so that they will always click the right button. The materialize library was used to provide consistent elements that can be easily used by the user and wich adapt to every screen size. When something does go wrong this is pointed out in the form itself, or if it is database related (password, username or embed-code) the user is redirected back to the form with a message about the mistake. There's also an error page, wich should not appear during 'normal' use. 
 Only a few distinctive colors are used so that all elements are clearly seprated and don't blur the overall view.
 
 ### User stories
-* As a first time visitor I want to see a description of website on my first page load
+* As a first time visitor I want to see a description of the website on my first page load
 * As a first time visitor I want to be able to see the tracks that have already been submitted
 * As an artist I want to create a user account wich enables me to participate
 * As an artist I want to submit my track to the contest
@@ -57,6 +62,8 @@ Only a few distinctive colors are used so that all elements are clearly seprated
 * As the site owner I want to find new artists to release their music, or to book them for concerts
 * As the site owner I want to know why people like or dislike certain tracks
 * As the site owner I want to create a database of users for targeted advertisement
+* As the site owner I want to be able to delete a track
+* As the site owner I want to be able to delete a user account  
 
 ### Features
 - Main page
@@ -72,6 +79,11 @@ Only a few distinctive colors are used so that all elements are clearly seprated
     -   city
     -   website (optional)
     -   mailing list subscription (yes/no)   
+- Profile
+  - Enables all users to see other users profiles
+  - Enables the loggged in user to update its own details
+- Delete a user
+  - Enables the administrator to delete a user account
 - Log-in
   - Enables all registered users to log in to their account
 - Log-out
@@ -91,6 +103,8 @@ Only a few distinctive colors are used so that all elements are clearly seprated
       - The app will automatically strip the track number from this code to be used in its own embed code wich will provide a general look for all tracks in the list 
 - Edit a track (Only available in the track list if the user who submitted the track is also logged in )
     - Enables the user to update the information of the submitted track (except for the soundcloud embed-code)
+- Delete a track (Only available in the track list if the administrator is logged in )
+  - Enables the administrator to delete a track
 - View all tracks
   - Enables all users to see a list of the tracks
   - Enables all users to easily see the current rank of the track
@@ -101,9 +115,6 @@ Only a few distinctive colors are used so that all elements are clearly seprated
     - Enables all users to click on the track's user name to see its profile page
   - Enables all users to see the track votes
     - Enables all users to click on the voter's user name to see its profile page
-- Profile
-  - Enables all users to see other users profiles
-  - Enables the loggged in user to update its own details
 - Vote (via a track in the list)
   - Enables voters to vote for a track
   - Enables voters to leave a motivation with their vote
@@ -230,7 +241,7 @@ Only a few distinctive colors are used so that all elements are clearly seprated
 #### Not logged in
 ##### Protection against url's that can be copied from a user that was logged in
 - Clicked ```View all tracks```
-    - I could only view the tracks
+    - I could only view the tracks, not vote or edit
 - Entered in the browser ```http://127.0.0.1:5000/add_track```
     - Redirected to the login page with a message to login
 - Entered in the browser ```http://127.0.0.1:5000/view_users```
@@ -277,6 +288,13 @@ Only a few distinctive colors are used so that all elements are clearly seprated
   - Provided random password
     - Was redirected to the login page with a message that the password is incorrect
 
+
+#### Logged in
+- Entered in the browser ```http://127.0.0.1:5000/view_user/<wrong_id_number>```
+  - Got a message that the page does not exist
+- Entered in the browser ```http://127.0.0.1:5000/view_track/<wrong_id_number>```
+  - Got a message that the page does not exist
+
 #### Logged in as ```contributor```
 - Menu option: ```Add a track```
     - clicked ```add your track``` with no fields filled
@@ -302,16 +320,23 @@ Only a few distinctive colors are used so that all elements are clearly seprated
 - All elements are on a single row
 - Container width is maximized
 - Mobile menu is used
+- User list scrolls horizontally
 
 #### Screen sizes: 600 - 996 px
 - Two form elements per row (except for long urls)
+- Mobile menu is used
+- User list scrolls horizontally
 
 #### Screen sizes: 996 - px
 - Desktop menu is used
+- User list scrolls vertically
 
 ### Issues encountered while testing
 - A wrong embed code wasn't detected
   - Implemented a test wich redirects back to the form, providing an error message
+- When using a wrong ObjectId in a redirect I got error 500 (internal server error)
+  - Implemented a catch that redirects to the error page
+
   
 ## Deployment 
 This project was deployed on heroku from the ```master branch```
@@ -350,7 +375,7 @@ This project was deployed on heroku from the ```master branch```
 - Push the local repository to the new remote:
     - ``` git push origin master ```
 
-#### Now first create the heroku app:
+#### Create the heroku app
 - Go to the apps page on Heroku: [Heroku](https://dashboard.heroku.com/apps)
 - Click ```New```
 - Select ```Create new app```
@@ -384,7 +409,7 @@ This project was deployed on heroku from the ```master branch```
 
           import os
           os.environ["MONGO_URI"] = "<Your personal MongoDB URI>"
-          os.environ["secret_key"] = "<randum_string>"
+          os.environ["secret_key"] = "<random_string>"
 
     - The app will first look for this file to load the environment variables
     - If this file is not found it assumes that they are allready present in the environment (For example heroku)

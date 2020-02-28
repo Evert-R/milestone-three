@@ -39,15 +39,6 @@ def index():
                            )
 
 
-@app.route('/contest_ended')
-def contest_ended():
-    return render_template('contestend.html',
-                           contests=mongo.db.contests.find().sort("_id", -1),
-                           tracks=mongo.db.tracks.find().sort("total_votes", -1).limit(5),
-                           total_tracks=mongo.db.tracks.count_documents({})
-                           )
-
-
 # login page (no authorization required for this project)
 @app.route('/login')
 def login():
@@ -115,6 +106,16 @@ def insert_contest():
 def end_contest():
     mongo.db.contests.update_one({'active': True}, {'$set': {'active': False}})
     return redirect(url_for('get_tracks'))
+
+
+# Show the 5 winners
+@app.route('/contest_ended')
+def contest_ended():
+    return render_template('contestend.html',
+                           contests=mongo.db.contests.find().sort("_id", -1),
+                           tracks=mongo.db.tracks.find().sort("total_votes", -1).limit(5),
+                           total_tracks=mongo.db.tracks.count_documents({})
+                           )
 
 
 # track listing page
@@ -546,6 +547,7 @@ def delete_style(style_id):
         return render_template('login.html',
                                message='Please login first to use this function',
                                users=mongo.db.users.find().sort('user_name'))
+
 
 # Missing page handling
 @app.errorhandler(404)
