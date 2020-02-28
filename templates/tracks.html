@@ -1,25 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="row">
-
-</div>
 
 {% if no_tracks %}
-
 <div class="row">
     <div class="col s12 er-light">
         No tracks found
     </div>
 </div>
-
 {% else %}
-
 <div class="row">
     <div class="col s12 er-dark z-depth-3">
         <h1 class="center-align">Tracks in this contest</h1>
     </div>
 </div>
-
 <div class="row">
     <div class="col s12 er-light z-depth-5">
         <form action="{{url_for('get_tracks_filtered')}}" method="POST">
@@ -43,7 +36,6 @@
                     <option value="{{method.method}}">{{method.method}}</option>
                     {% endfor %}
                 </select>
-
             </div>
         </form>
         <form action="{{url_for('get_tracks_sorted')}}" method="POST">
@@ -61,10 +53,7 @@
     </div>
 </div>
 
-
-
 {% for track in tracks %}
-
 <div class="row">
     {# Only show ranking on whole list #}
     {% if ranking != 'false' %}
@@ -97,7 +86,6 @@
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Delete</a>
                     {% endif %}
                 </div>
-
                 <div class="collapsible-body">
                     <div class="row">
                         <div class="col s12 m10 offset-m1 er-inner-wrap">
@@ -147,7 +135,6 @@
                         </div>
                     </div>
                 </div>
-
             </li>
             <li>
                 <div class="collapsible-header">
@@ -185,7 +172,6 @@
                                 </tr>
                                 {% endfor %}
                                 <tr>
-
                                     <td><br><br>
                                         Total score:
                                     </td>
@@ -195,9 +181,7 @@
                                     <td></td>
                                 </tr>
                             </table>
-
                         </div>
-
                     </div>
                     <div class="center-align er-vote-button">
                         {# only show vote button to voters #}
@@ -219,9 +203,7 @@
                 <div class="col s12 l4">
                     <p class="btn-floating btn-small amber"><i class="material-icons">palette</i></p>
                     <span class="er-track-icons"> {{ track.creation_method }}</span>
-
                 </div>
-
                 <div class="col s12 l4">
                     <p class="right-align"><span class="er-track-icons">Total score:</span>
                         <span class="btn-floating btn-small waves-effect waves-light red pulse">
@@ -231,10 +213,6 @@
         </div>
     </div>
 </div>
-
-
-
-
 
 {% endfor %}
 {% endif %}
