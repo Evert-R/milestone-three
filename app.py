@@ -293,6 +293,24 @@ def update_track(track_id):
     return redirect(url_for('get_tracks'))
 
 
+# delete a track (admin only)
+@app.route('/delete_track/<track_id>')
+def delete_track(track_id):
+    """ check if the administrator is logged in """
+    if 'user_name' in session:
+        if session['user_role'] == 'administrator':
+            tracks = mongo.db.tracks
+            tracks.delete_one({'_id': ObjectId(track_id)})
+            return redirect(url_for('get_tracks'))
+        else:
+            return render_template('permission.html',
+                                   message='You are not allowed to use this function')
+    else:
+        return render_template('login.html',
+                               message='Please login first to use this function',
+                               users=mongo.db.users.find().sort('user_name'))
+
+
 # register new user form
 @app.route('/add_user')
 def add_user():
@@ -356,7 +374,7 @@ def update_user(user_id):
 
 
 # delete a user (admin only)
-@app.route('/delete_method/<user_id>')
+@app.route('/delete_user/<user_id>')
 def delete_user(user_id):
     """ check if the administrator is logged in """
     if 'user_name' in session:
@@ -546,4 +564,4 @@ def internal_error(error):
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=os.environ.get('PORT'),
-            debug=True)
+            debug=False)

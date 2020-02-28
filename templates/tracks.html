@@ -92,6 +92,10 @@
                     <a href="{{url_for('view_track', track_id=track._id)}}" title="edit track details"
                         class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Edit</a>
                     {% endif %}
+                    {% if session['user_role'] == 'administrator' %}
+                    <a href="{{url_for('delete_track', track_id=track._id)}}" title="Delete track"
+                        class="waves-effect waves-light btn btn_flat blue-grey darken-3 er-right">Delete</a>
+                    {% endif %}
                 </div>
 
                 <div class="collapsible-body">
